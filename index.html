@@ -1,0 +1,2363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Internet & Political Campaigns</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@300;400&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0a0a0a;
+    --paper: #f5f0e8;
+    --accent: #c8102e;
+    --gold: #b8922a;
+    --muted: #6b6560;
+    --rule: #d4cfc6;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE TEXTURE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    opacity: 0.6;
+  }
+
+  /* ── MASTHEAD ── */
+  .masthead {
+    border-bottom: 3px double var(--ink);
+    padding: 1.2rem 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky; top: 0; z-index: 100;
+    background: var(--paper);
+  }
+
+  .masthead-date {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  .masthead-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 0.12em;
+    color: var(--ink);
+  }
+
+  .masthead-nav {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .masthead-nav a {
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s;
+  }
+
+  .masthead-nav a:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    overflow: hidden;
+    min-height: 88vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .hero-left {
+    padding: 4rem 3rem 4rem 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-right: 2px solid var(--ink);
+    position: relative;
+  }
+
+  .hero-kicker {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .hero-kicker::before {
+    content: '';
+    display: block;
+    width: 2rem;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  .hero-headline {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(4rem, 8vw, 7.5rem);
+    line-height: 0.92;
+    letter-spacing: 0.02em;
+    margin-bottom: 2rem;
+    color: var(--ink);
+  }
+
+  .hero-headline em {
+    font-style: italic;
+    color: var(--accent);
+    font-family: 'Playfair Display', serif;
+    font-weight: 400;
+    font-size: 0.85em;
+  }
+
+  .hero-subhead {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.1rem;
+    line-height: 1.65;
+    color: var(--muted);
+    max-width: 38ch;
+    margin-bottom: 2.5rem;
+  }
+
+  .hero-byline {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  .hero-right {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 4rem 3rem;
+    background: var(--ink);
+    color: var(--paper);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-right::before {
+    content: '"';
+    position: absolute;
+    top: -2rem;
+    left: 2rem;
+    font-family: 'Playfair Display', serif;
+    font-size: 20rem;
+    color: rgba(255,255,255,0.04);
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .hero-quote {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: clamp(1.4rem, 2.5vw, 2rem);
+    line-height: 1.5;
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-quote-source {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.45);
+  }
+
+  /* ── STATS BAND ── */
+  .stats-band {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .stat-cell {
+    padding: 2.5rem 2rem;
+    border-right: 1px solid var(--rule);
+    text-align: center;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .stat-cell.visible { opacity: 1; transform: translateY(0); }
+  .stat-cell:last-child { border-right: none; }
+
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3.5rem;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 0.4rem;
+  }
+
+  .stat-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* ── SECTION WRAPPER ── */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 3rem;
+    position: relative; z-index: 1;
+  }
+
+  /* ── SECTION HEADER ── */
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1.5rem;
+    padding: 4rem 0 2rem;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 3rem;
+  }
+
+  .section-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 5rem;
+    color: var(--rule);
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.8rem;
+    letter-spacing: 0.04em;
+    line-height: 1;
+  }
+
+  /* ── PILLARS GRID ── */
+  .pillars {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    border: 2px solid var(--ink);
+    margin-bottom: 5rem;
+  }
+
+  .pillar {
+    padding: 2.5rem 2rem;
+    border-right: 1px solid var(--ink);
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+
+  .pillar.visible { opacity: 1; transform: translateY(0); }
+  .pillar:last-child { border-right: none; }
+
+  .pillar-icon {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3.5rem;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 1rem;
+  }
+
+  .pillar h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    margin-bottom: 0.75rem;
+    font-weight: 700;
+  }
+
+  .pillar p {
+    font-size: 0.88rem;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+
+  /* ── INTERNET DEEP DIVE ── */
+  .internet-section {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 5rem 0;
+    margin-bottom: 5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .internet-section::after {
+    content: 'WWW';
+    position: absolute;
+    bottom: -2rem;
+    right: 2rem;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14rem;
+    color: rgba(255,255,255,0.03);
+    pointer-events: none;
+    line-height: 1;
+  }
+
+  .internet-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  .internet-left h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 4.5rem;
+    line-height: 0.95;
+    letter-spacing: 0.03em;
+    margin-bottom: 1.5rem;
+  }
+
+  .internet-left h2 span {
+    color: var(--accent);
+    display: block;
+  }
+
+  .internet-intro {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1rem;
+    line-height: 1.7;
+    color: rgba(245,240,232,0.7);
+    margin-bottom: 2rem;
+  }
+
+  .internet-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  /* ── CARDS ── */
+  .cards-trio {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+
+  .card {
+    background: rgba(245,240,232,0.06);
+    border: 1px solid rgba(245,240,232,0.12);
+    padding: 2rem 1.5rem;
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease, background 0.3s;
+  }
+
+  .card.visible { opacity: 1; transform: translateY(0); }
+
+  .card:hover { background: rgba(245,240,232,0.1); }
+
+  .card-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.75rem;
+  }
+
+  .card h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.75rem;
+    line-height: 1;
+  }
+
+  .card p {
+    font-size: 0.84rem;
+    line-height: 1.7;
+    color: rgba(245,240,232,0.65);
+  }
+
+  .card-accent-line {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--accent);
+  }
+
+  /* ── QUOTE BLOCK ── */
+  .pull-quote {
+    padding: 3rem 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    margin: 3rem 0;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 2rem;
+    align-items: center;
+  }
+
+  .pull-quote-mark {
+    font-family: 'Playfair Display', serif;
+    font-size: 8rem;
+    color: var(--rule);
+    line-height: 0.7;
+    align-self: flex-start;
+  }
+
+  .pull-quote blockquote {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.5rem;
+    line-height: 1.55;
+    margin-bottom: 1rem;
+  }
+
+  .pull-quote cite {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-style: normal;
+  }
+
+  /* ── TWO PILLARS: INTERACTIVITY + CUSTOMIZATION ── */
+  .dual-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border: 2px solid var(--ink);
+    margin-bottom: 5rem;
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .dual-section.visible { opacity: 1; transform: translateY(0); }
+
+  .dual-cell {
+    padding: 3rem 2.5rem;
+  }
+
+  .dual-cell:first-child { border-right: 2px solid var(--ink); }
+
+  .dual-cell-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .dual-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .dual-cell-header h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 0.04em;
+    line-height: 1;
+  }
+
+  .dual-cell p {
+    font-size: 0.9rem;
+    line-height: 1.8;
+    color: var(--muted);
+    margin-bottom: 1rem;
+  }
+
+  .dual-cell ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .dual-cell li {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--muted);
+    padding-left: 1rem;
+    position: relative;
+    line-height: 1.5;
+  }
+
+  .dual-cell li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-size: 0.65rem;
+  }
+
+  /* ── COST SECTION ── */
+  .cost-section {
+    background: #1a1614;
+    color: var(--paper);
+    padding: 5rem 0;
+    margin-bottom: 5rem;
+  }
+
+  .cost-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+
+  .cost-heading {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3.5rem;
+    line-height: 1;
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.03em;
+  }
+
+  .cost-body {
+    font-size: 0.92rem;
+    line-height: 1.8;
+    color: rgba(245,240,232,0.7);
+    margin-bottom: 2rem;
+  }
+
+  .cost-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .cost-list li {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: rgba(245,240,232,0.65);
+  }
+
+  .cost-list .marker {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.6rem;
+    background: var(--accent);
+    color: var(--paper);
+    padding: 0.15rem 0.4rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+  }
+
+  .cost-aside {
+    background: rgba(245,240,232,0.05);
+    border: 1px solid rgba(245,240,232,0.12);
+    padding: 2.5rem 2rem;
+  }
+
+  .cost-aside-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 5rem;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .cost-aside-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.45);
+    line-height: 1.6;
+  }
+
+  /* ── CONCLUSION ── */
+  .conclusion {
+    padding: 5rem 0 3rem;
+    border-top: 3px double var(--ink);
+    margin-top: 2rem;
+  }
+
+  .conclusion-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: start;
+  }
+
+  .conclusion h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 4rem;
+    line-height: 0.95;
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.02em;
+  }
+
+  .conclusion h2 em {
+    font-style: italic;
+    color: var(--accent);
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 0.9em;
+  }
+
+  .conclusion p {
+    font-size: 0.92rem;
+    line-height: 1.85;
+    color: var(--muted);
+    margin-bottom: 1rem;
+  }
+
+  .final-quote {
+    padding: 2.5rem;
+    border: 2px solid var(--ink);
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .final-quote blockquote {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.15rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+
+  .final-quote cite {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.4);
+    font-style: normal;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 2px solid var(--ink);
+    padding: 1.5rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 3rem;
+  }
+
+  footer p {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* ── ANIMATION HELPERS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-left > * {
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards;
+  }
+
+  .hero-left > *:nth-child(1) { animation-delay: 0.1s; }
+  .hero-left > *:nth-child(2) { animation-delay: 0.25s; }
+  .hero-left > *:nth-child(3) { animation-delay: 0.4s; }
+  .hero-left > *:nth-child(4) { animation-delay: 0.55s; }
+
+  .hero-right > * {
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards;
+  }
+  .hero-right > *:nth-child(1) { animation-delay: 0.5s; }
+  .hero-right > *:nth-child(2) { animation-delay: 0.65s; }
+
+  /* ── NEWSLETTER SECTION ── */
+  .newsletter-section {
+    background: var(--accent);
+    padding: 5rem 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .newsletter-section::before {
+    content: '@';
+    position: absolute;
+    right: -2rem;
+    top: -3rem;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22rem;
+    color: rgba(0,0,0,0.1);
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .newsletter-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    position: relative; z-index: 1;
+  }
+
+  .newsletter-left h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 4rem;
+    line-height: 0.95;
+    color: #fff;
+    letter-spacing: 0.03em;
+    margin-bottom: 1rem;
+  }
+
+  .newsletter-left p {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1rem;
+    line-height: 1.65;
+    color: rgba(255,255,255,0.8);
+    margin-bottom: 1.5rem;
+  }
+
+  .newsletter-preview-hint {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+  }
+
+  .newsletter-preview-hint::before {
+    content: '';
+    display: block;
+    width: 1.5rem;
+    height: 1px;
+    background: rgba(255,255,255,0.4);
+  }
+
+  .newsletter-form-wrap {
+    background: #fff;
+    padding: 2.5rem;
+    position: relative;
+  }
+
+  .newsletter-form-wrap::before {
+    content: '';
+    position: absolute;
+    top: 6px; left: 6px;
+    right: -6px; bottom: -6px;
+    border: 2px solid rgba(0,0,0,0.15);
+    pointer-events: none;
+  }
+
+  .newsletter-form-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: block;
+    margin-bottom: 0.4rem;
+  }
+
+  .newsletter-form-label + label {
+    display: block;
+    margin-top: 1rem;
+  }
+
+  .nf-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .nf-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .nf-field label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .nf-field input, .nf-field select {
+    border: 1.5px solid var(--rule);
+    background: var(--paper);
+    padding: 0.65rem 0.75rem;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.85rem;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.2s;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  .nf-field input:focus, .nf-field select:focus {
+    border-color: var(--accent);
+  }
+
+  .nf-full { margin-bottom: 1rem; }
+
+  .nf-interests {
+    margin-bottom: 1.25rem;
+  }
+
+  .nf-interests-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .nf-checkboxes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .nf-check {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    cursor: pointer;
+  }
+
+  .nf-check input[type="checkbox"] {
+    width: 14px; height: 14px;
+    border: 1.5px solid var(--rule);
+    background: var(--paper);
+    appearance: none; -webkit-appearance: none;
+    cursor: pointer;
+    position: relative;
+    flex-shrink: 0;
+    transition: background 0.15s, border-color 0.15s;
+  }
+
+  .nf-check input[type="checkbox"]:checked {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .nf-check input[type="checkbox"]:checked::after {
+    content: '✓';
+    position: absolute;
+    color: #fff;
+    font-size: 9px;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -52%);
+    font-weight: 700;
+  }
+
+  .nf-check span {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.06em;
+    color: var(--ink);
+  }
+
+  .nf-submit {
+    width: 100%;
+    background: var(--ink);
+    color: var(--paper);
+    border: none;
+    padding: 0.9rem 2rem;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    letter-spacing: 0.12em;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .nf-submit:hover { background: var(--accent); }
+  .nf-submit:active { transform: scale(0.99); }
+
+  .nf-submit .btn-text { position: relative; z-index: 1; }
+
+  /* ── NEWSPAPER MODAL + PAGE FLIP ── */
+  .modal-overlay {
+    position: fixed; inset: 0; z-index: 1000;
+    background: rgba(5,5,5,0.92);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+    backdrop-filter: blur(6px);
+  }
+
+  .modal-overlay.open {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  /* ── BOOK CHROME: toolbar above the book ── */
+  .book-chrome {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 900px;
+    padding: 0 0 0.75rem;
+    opacity: 0;
+    transform: translateY(-8px);
+    transition: opacity 0.4s 0.25s ease, transform 0.4s 0.25s ease;
+  }
+
+  .modal-overlay.open .book-chrome {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .book-title-bar {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 0.15em;
+    color: rgba(245,240,232,0.5);
+  }
+
+  .book-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .book-page-indicator {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    color: rgba(245,240,232,0.4);
+  }
+
+  .book-nav-btn {
+    background: rgba(245,240,232,0.08);
+    border: 1px solid rgba(245,240,232,0.15);
+    color: rgba(245,240,232,0.7);
+    width: 34px; height: 34px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'IBM Plex Sans', sans-serif;
+  }
+
+  .book-nav-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .book-nav-btn:disabled { opacity: 0.25; cursor: default; pointer-events: none; }
+
+  .np-close {
+    background: rgba(245,240,232,0.08);
+    border: 1px solid rgba(245,240,232,0.15);
+    color: rgba(245,240,232,0.7);
+    width: 34px; height: 34px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s;
+    font-family: 'IBM Plex Sans', sans-serif;
+  }
+  .np-close:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+  /* ── BOOK STAGE ── */
+  .book-stage {
+    width: 100%;
+    max-width: 900px;
+    perspective: 2200px;
+    position: relative;
+  }
+
+  /* ── PAGE WRAPPER (the 3D flipper) ── */
+  .book-flipper {
+    width: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+  }
+
+  /* Each .book-page is a full content panel */
+  .book-page {
+    width: 100%;
+    background: #faf6ec;
+    font-family: 'IBM Plex Sans', sans-serif;
+    box-shadow: 0 20px 80px rgba(0,0,0,0.6), 4px 0 30px rgba(0,0,0,0.3);
+    position: relative;
+    display: none;
+    max-height: 85vh;
+    overflow-y: auto;
+  }
+
+  .book-page.active { display: block; }
+
+  /* FLIP OUT: current page flips away to the left */
+  @keyframes flipOut {
+    0%   { transform: rotateY(0deg); opacity: 1; transform-origin: left center; }
+    100% { transform: rotateY(-90deg); opacity: 0; transform-origin: left center; }
+  }
+
+  /* FLIP IN: new page arrives from the right */
+  @keyframes flipIn {
+    0%   { transform: rotateY(90deg); opacity: 0; transform-origin: left center; }
+    100% { transform: rotateY(0deg);  opacity: 1; transform-origin: left center; }
+  }
+
+  /* FLIP BACK OUT: current page flips away to the right */
+  @keyframes flipBackOut {
+    0%   { transform: rotateY(0deg);   opacity: 1; transform-origin: right center; }
+    100% { transform: rotateY(90deg);  opacity: 0; transform-origin: right center; }
+  }
+
+  /* FLIP BACK IN: prev page arrives from the left */
+  @keyframes flipBackIn {
+    0%   { transform: rotateY(-90deg); opacity: 0; transform-origin: right center; }
+    100% { transform: rotateY(0deg);   opacity: 1; transform-origin: right center; }
+  }
+
+  .book-page.flip-out      { display: block; animation: flipOut     0.42s cubic-bezier(0.4,0,0.2,1) forwards; }
+  .book-page.flip-in       { display: block; animation: flipIn      0.42s cubic-bezier(0.4,0,0.2,1) forwards; }
+  .book-page.flip-back-out { display: block; animation: flipBackOut 0.42s cubic-bezier(0.4,0,0.2,1) forwards; }
+  .book-page.flip-back-in  { display: block; animation: flipBackIn  0.42s cubic-bezier(0.4,0,0.2,1) forwards; }
+
+  /* Spine shadow on left edge of each page */
+  .book-page::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 18px;
+    background: linear-gradient(to right, rgba(0,0,0,0.12), transparent);
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  /* Page-turn hint corners */
+  .page-corner-hint {
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 0; height: 0;
+    border-style: solid;
+    border-width: 0 0 28px 28px;
+    border-color: transparent transparent rgba(0,0,0,0.15) transparent;
+    pointer-events: none;
+    z-index: 5;
+  }
+
+  /* Newspaper Header */
+  .np-header {
+    border-bottom: 4px double #0a0a0a;
+    text-align: center;
+    padding: 1.2rem 2rem 0.8rem;
+    background: #faf6ec;
+  }
+
+  .np-flag {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    color: #555;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.4rem;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  .np-flag-center {
+    flex: 1;
+    text-align: center;
+    font-size: 0.55rem;
+    letter-spacing: 0.2em;
+    color: #888;
+  }
+
+  .np-nameplate {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.2rem;
+    font-weight: 700;
+    color: #0a0a0a;
+    line-height: 1;
+    margin-bottom: 0.3rem;
+    letter-spacing: -0.01em;
+  }
+
+  .np-rule-row {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-bottom: 0.5rem;
+  }
+
+  .np-rule-line { flex: 1; height: 1px; background: #0a0a0a; }
+  .np-rule-dot {
+    width: 5px; height: 5px;
+    background: var(--accent);
+    border-radius: 50%;
+    margin: 0 6px;
+    flex-shrink: 0;
+  }
+
+  .np-tagline {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.2em;
+    color: #777;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .np-nav {
+    display: flex;
+    border-top: 1px solid #0a0a0a;
+    border-bottom: 1px solid #0a0a0a;
+    margin: 0 -2rem;
+  }
+
+  .np-nav span {
+    flex: 1;
+    text-align: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.3rem 0;
+    border-right: 1px solid #0a0a0a;
+    color: #333;
+  }
+  .np-nav span:last-child { border-right: none; }
+  .np-nav span.active { background: #0a0a0a; color: #faf6ec; }
+
+  /* Newspaper Body */
+  .np-body {
+    padding: 1.2rem 2rem;
+  }
+
+  /* Lead story */
+  .np-lead {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1.2rem;
+    border-bottom: 2px solid #0a0a0a;
+    padding-bottom: 1.2rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .np-lead-left {}
+
+  .np-section-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border-left: 2px solid var(--accent);
+    padding-left: 0.4rem;
+    margin-bottom: 0.4rem;
+    display: block;
+  }
+
+  .np-lead-headline {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.7rem;
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 0.5rem;
+    color: #0a0a0a;
+  }
+
+  .np-lead-deck {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 0.82rem;
+    line-height: 1.5;
+    color: #555;
+    margin-bottom: 0.6rem;
+    border-left: 3px solid var(--rule);
+    padding-left: 0.7rem;
+  }
+
+  .np-body-text {
+    font-size: 0.8rem;
+    line-height: 1.75;
+    color: #333;
+    column-count: 1;
+  }
+
+  .np-body-text p { margin-bottom: 0.6em; }
+
+  .np-dropcap::first-letter {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.4em;
+    font-weight: 700;
+    float: left;
+    line-height: 0.75;
+    margin: 0.05em 0.08em 0 0;
+    color: var(--accent);
+  }
+
+  .np-lead-right {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    border-left: 1px solid #ccc;
+    padding-left: 1rem;
+  }
+
+  .np-sidebar-item {}
+
+  .np-sidebar-item .np-section-tag { margin-bottom: 0.3rem; }
+
+  .np-sidebar-headline {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 0.3rem;
+    color: #0a0a0a;
+  }
+
+  .np-sidebar-text {
+    font-size: 0.72rem;
+    line-height: 1.65;
+    color: #555;
+  }
+
+  .np-sidebar-divider {
+    border: none;
+    border-top: 1px solid #ccc;
+    margin: 0;
+  }
+
+  /* Three-column row */
+  .np-three-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1rem;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 1.2rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .np-col-article {}
+  .np-col-article + .np-col-article { border-left: 1px solid #ccc; padding-left: 1rem; }
+
+  .np-col-headline {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.98rem;
+    font-weight: 700;
+    line-height: 1.25;
+    margin-bottom: 0.3rem;
+    color: #0a0a0a;
+  }
+
+  .np-col-text {
+    font-size: 0.72rem;
+    line-height: 1.65;
+    color: #555;
+  }
+
+  /* Stat box */
+  .np-stat-box {
+    background: #0a0a0a;
+    color: #faf6ec;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .np-stat-box-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.4rem;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .np-stat-box-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.55);
+  }
+
+  /* Pull quote inline */
+  .np-inline-quote {
+    border-top: 2px solid #0a0a0a;
+    border-bottom: 2px solid #0a0a0a;
+    padding: 0.6rem 0;
+    margin: 0.8rem 0;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 0.92rem;
+    line-height: 1.45;
+    color: #0a0a0a;
+    text-align: center;
+  }
+
+  /* Ad block */
+  .np-ad {
+    border: 2px solid #0a0a0a;
+    padding: 0.75rem 1rem;
+    text-align: center;
+    background: #faf6ec;
+    margin-top: auto;
+  }
+
+  .np-ad-headline {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    margin-bottom: 0.2rem;
+  }
+
+  .np-ad-text {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.1em;
+    color: #666;
+    line-height: 1.5;
+  }
+
+  /* Footer of newspaper */
+  .np-footer {
+    border-top: 3px double #0a0a0a;
+    padding: 0.6rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #0a0a0a;
+  }
+
+  .np-footer p {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.52rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(250,246,236,0.45);
+  }
+
+  .np-footer-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #faf6ec;
+  }
+
+  /* Success state */
+  .nf-success {
+    display: none;
+    text-align: center;
+    padding: 2rem;
+  }
+
+  .nf-success.show { display: block; }
+  .nf-success-icon {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+
+  .nf-success h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.05em;
+  }
+
+  .nf-success p {
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+
+  .nf-preview-btn {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 0.75rem 2rem;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .nf-preview-btn:hover { background: var(--ink); }
+
+  /* ── QR CODE SECTION ── */
+  .qr-section {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 4rem 0;
+    border-top: 3px double var(--paper);
+  }
+
+  .qr-inner {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+
+  .qr-card {
+    background: #fff;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .qr-card::before {
+    content: '';
+    position: absolute;
+    top: 8px; left: 8px; right: -8px; bottom: -8px;
+    border: 2px solid rgba(255,255,255,0.12);
+    pointer-events: none;
+  }
+
+  .qr-card-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: center;
+    line-height: 1.5;
+  }
+
+  #qr-canvas {
+    display: block;
+  }
+
+  .qr-scan-badge {
+    background: var(--accent);
+    color: #fff;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.15em;
+    padding: 0.3rem 0.8rem;
+    text-align: center;
+  }
+
+  .qr-right h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3.5rem;
+    line-height: 0.95;
+    letter-spacing: 0.03em;
+    margin-bottom: 1rem;
+    color: #fff;
+  }
+
+  .qr-right h2 span {
+    color: var(--accent);
+    display: block;
+  }
+
+  .qr-right p {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: rgba(245,240,232,0.7);
+    margin-bottom: 2rem;
+    max-width: 44ch;
+  }
+
+  .qr-steps {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+  }
+
+  .qr-steps li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.8rem;
+    font-size: 0.85rem;
+    color: rgba(245,240,232,0.65);
+    line-height: 1.5;
+  }
+
+  .qr-step-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    color: var(--accent);
+    flex-shrink: 0;
+    width: 1.2rem;
+    line-height: 1.3;
+  }
+
+  .qr-url-box {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    border: 1px solid rgba(255,255,255,0.15);
+    overflow: hidden;
+    max-width: 420px;
+  }
+
+  .qr-url-text {
+    flex: 1;
+    padding: 0.6rem 0.8rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.05em;
+    color: rgba(245,240,232,0.55);
+    background: rgba(255,255,255,0.04);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .qr-copy-btn {
+    background: rgba(255,255,255,0.08);
+    border: none;
+    border-left: 1px solid rgba(255,255,255,0.15);
+    color: rgba(245,240,232,0.7);
+    padding: 0.6rem 1rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    white-space: nowrap;
+  }
+
+  .qr-copy-btn:hover { background: var(--accent); color: #fff; }
+
+  .qr-dl-btn {
+    display: inline-block;
+    margin-top: 1rem;
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.25);
+    color: rgba(245,240,232,0.6);
+    padding: 0.5rem 1.2rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+  }
+
+  .qr-dl-btn:hover { background: var(--paper); color: var(--ink); border-color: var(--paper); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .masthead-nav { display: none; }
+    .hero { grid-template-columns: 1fr; }
+    .hero-right { display: none; }
+    .stats-band { grid-template-columns: 1fr 1fr; }
+    .pillars { grid-template-columns: 1fr; }
+    .pillar { border-right: none; border-bottom: 1px solid var(--ink); }
+    .internet-grid { grid-template-columns: 1fr; }
+    .cards-trio { grid-template-columns: 1fr; }
+    .dual-section { grid-template-columns: 1fr; }
+    .dual-cell:first-child { border-right: none; border-bottom: 2px solid var(--ink); }
+    .cost-grid { grid-template-columns: 1fr; }
+    .conclusion-grid { grid-template-columns: 1fr; }
+    .container { padding: 0 1.5rem; }
+    .masthead { padding: 1rem 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- MASTHEAD -->
+<header class="masthead">
+  <span class="masthead-date">Routledge Handbook of Political Management</span>
+  <span class="masthead-title">Political Media Review</span>
+  <nav><ul class="masthead-nav">
+    <li><a href="#internet">Internet</a></li>
+    <li><a href="#interactivity">Interactivity</a></li>
+    <li><a href="#customization">Customization</a></li>
+    <li><a href="#cost">Cost</a></li>
+    <li><a href="#newsletter">Newsletter</a></li>
+    <li><a href="#qr-code">QR Code</a></li>
+  </ul></nav>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-kicker">Peter Fenn — New Media in Political Campaigns</div>
+    <h1 class="hero-headline">The <em>Internet</em><br>Changes<br>Everything</h1>
+    <p class="hero-subhead">How digital technology is reshaping the way candidates reach voters — and what the future of political advertising looks like.</p>
+    <p class="hero-byline">Chapter Analysis · Routledge Handbook of Political Management</p>
+  </div>
+  <div class="hero-right">
+    <blockquote class="hero-quote">"E-mail campaigning will leave television in the dust once the collection of addresses has been completed."</blockquote>
+    <p class="hero-quote-source">— Dick Morris, Political Consultant</p>
+  </div>
+</section>
+
+<!-- STATS BAND -->
+<div class="stats-band">
+  <div class="stat-cell">
+    <div class="stat-num">71%</div>
+    <div class="stat-label">of Americans use<br>the Internet<br><em style="font-style:normal;color:#b8922a">(UCLA Study, c. 2007)</em></div>
+  </div>
+  <div class="stat-cell">
+    <div class="stat-num">265%</div>
+    <div class="stat-label">Growth in high-speed<br>home Internet<br>2002–2006</div>
+  </div>
+  <div class="stat-cell">
+    <div class="stat-num">46%</div>
+    <div class="stat-label">of Internet users get<br>political news online<br><em style="font-style:normal;color:#b8922a">(Pew, Nov. 2006)</em></div>
+  </div>
+  <div class="stat-cell">
+    <div class="stat-num">23%</div>
+    <div class="stat-label">became online<br>political activists,<br>creating content</div>
+  </div>
+</div>
+
+<!-- THREE CHALLENGES -->
+<div class="container">
+  <div class="section-header">
+    <span class="section-number">01</span>
+    <h2 class="section-title">Three Forces Reshaping Political Media</h2>
+  </div>
+
+  <div class="pillars">
+    <div class="pillar">
+      <div class="pillar-icon">I</div>
+      <h3>Audience Fragmentation</h3>
+      <p>Primetime broadcast viewing dropped from 74.8% in 1990 to 43.7% by 2006. The "Big Three" networks lost half their audiences to hundreds of cable channels and the open web. Reaching a critical mass of voters through a single medium became nearly impossible.</p>
+    </div>
+    <div class="pillar">
+      <div class="pillar-icon">II</div>
+      <h3>Rising Advertising Costs</h3>
+      <p>A 30-second spot on Grey's Anatomy in Minneapolis cost $20,000 in the 2006 cycle. Candidates were forced to pay rates averaging 65% above the federally mandated Lowest Unit Rate as stations steered them toward non-preemptible slots.</p>
+    </div>
+    <div class="pillar">
+      <div class="pillar-icon">III</div>
+      <h3>Media Saturation</h3>
+      <p>The average American encounters 3,225 messages per day. Only 8% of evening viewers could name a product they'd just seen advertised — down from 34% in 1965. Standing out in this noise requires not just spending more, but spending radically smarter.</p>
+    </div>
+  </div>
+</div>
+
+<!-- INTERNET DEEP DIVE -->
+<section class="internet-section" id="internet">
+  <div class="container">
+    <div class="internet-grid">
+      <div class="internet-left">
+        <p class="internet-label">The Master Medium</p>
+        <h2>The<br><span>Internet</span><br>Advantage</h2>
+        <p class="internet-intro">Gary Selnow of San Francisco State declared the Internet the "master medium" — combining text, audio, video, and direct mail capabilities in a single interactive, instantaneous platform unlike any before it.</p>
+        <p class="internet-label">Three Strategic Pillars</p>
+      </div>
+
+      <div>
+        <div class="cards-trio">
+          <div class="card">
+            <div class="card-accent-line"></div>
+            <div class="card-tag">01 / Channel</div>
+            <h3>Internet Advertising</h3>
+            <p>Campaigns can purchase 1,000 targeted impressions for roughly $35 — far below network TV costs. Demotargeting and geotargeting allow ads to be served exclusively to, say, Republican women earning over $50,000 in swing states.</p>
+          </div>
+          <div class="card">
+            <div class="card-accent-line"></div>
+            <div class="card-tag">02 / Channel</div>
+            <h3>E-mail Campaigns</h3>
+            <p>Larry Purpuro of the RNC called e-mail "a tactical nuclear weapon in the future." Sending is virtually costless, and with proper customization it avoids the spam problem entirely — each message tailored to individual voter concerns.</p>
+          </div>
+          <div class="card">
+            <div class="card-accent-line"></div>
+            <div class="card-tag">03 / Channel</div>
+            <h3>Candidate Websites</h3>
+            <p>Visitors to a campaign site are self-selected engaged voters. Position papers, videos, speeches, and live feeds transform the website into a deep, constantly updated portal — far beyond what any 30-second spot can deliver.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PULL QUOTE -->
+<div class="container">
+  <div class="pull-quote">
+    <div class="pull-quote-mark">"</div>
+    <div>
+      <blockquote>As a campaigning tool, e-mail is going to be what I would consider a tactical nuclear weapon in the future.</blockquote>
+      <cite>— Larry Purpuro, Deputy Chief of Staff, Republican National Committee (2000)</cite>
+    </div>
+  </div>
+</div>
+
+<!-- INTERACTIVITY + CUSTOMIZATION -->
+<div class="container">
+  <div class="section-header" id="interactivity">
+    <span class="section-number">02</span>
+    <h2 class="section-title">Grabbing — and Keeping — Attention</h2>
+  </div>
+
+  <div class="dual-section" id="customization">
+    <div class="dual-cell">
+      <div class="dual-cell-header">
+        <span class="dual-number">A</span>
+        <h3>Interactivity</h3>
+      </div>
+      <p>Two-way communication transforms passive viewers into engaged participants. Candidates with high interactivity on their websites were perceived as more sensitive, responsive, and trustworthy — especially by previously apathetic voters.</p>
+      <p>The internet allows thousands of voters to interact with a campaign simultaneously — something no other medium can replicate at scale.</p>
+      <ul>
+        <li>Online polls and live surveys</li>
+        <li>Chat rooms and candidate Q&amp;A sessions</li>
+        <li>Webcasts and live campaign feeds</li>
+        <li>Volunteer sign-up and community meet-ups</li>
+        <li>Real-time donation drives via credit card</li>
+      </ul>
+    </div>
+    <div class="dual-cell">
+      <div class="dual-cell-header">
+        <span class="dual-number">B</span>
+        <h3>Customization</h3>
+      </div>
+      <p>No other medium lets each individual voter choose what they want to learn. A well-designed site lets a voter concerned about healthcare dive deep into policy papers while a voter interested in foreign affairs explores those issues — on their own terms.</p>
+      <p>Technology enables "instant feedback" loops: tracking which ads drive click-throughs, which content fuels donations, and which pages hold attention — all without expensive external focus groups.</p>
+      <ul>
+        <li>Personalized candidate "home pages" by interest</li>
+        <li>Geo- and demo-targeted ad delivery</li>
+        <li>Viral video distribution via e-mail</li>
+        <li>Real-time A/B testing of messages</li>
+        <li>Automated notification on new content in areas of interest</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- COST MANAGEMENT -->
+<section class="cost-section" id="cost">
+  <div class="container">
+    <div class="cost-grid">
+      <div>
+        <h2 class="cost-heading">Managing<br>the Cost</h2>
+        <p class="cost-body">The more campaigns lean into the Internet, the greater the savings. Internet banner ads cost a fraction of television commercials. Bandwidth is cheaper than broadcast time slots. And live candidate feeds replace expensive multi-city travel schedules.</p>
+        <ul class="cost-list">
+          <li><span class="marker">Save</span> Producing and placing banner ads is a fraction of TV commercial costs</li>
+          <li><span class="marker">Save</span> Direct e-mail is virtually zero-cost at scale once lists are built</li>
+          <li><span class="marker">Save</span> Cable targeting reduces waste on non-target audiences</li>
+          <li><span class="marker">Gain</span> Instant feedback replaces costly polling and focus groups</li>
+          <li><span class="marker">Gain</span> Viral video spreads the message organically at no media-buy cost</li>
+          <li><span class="marker">Gain</span> List maintenance using digital tools frees staff for higher-value tasks</li>
+        </ul>
+      </div>
+      <div class="cost-aside">
+        <div class="cost-aside-num">$35</div>
+        <div class="cost-aside-label">Cost per 1,000<br>targeted online<br>ad impressions</div>
+        <br>
+        <div class="cost-aside-num" style="color:#c8102e">$20K</div>
+        <div class="cost-aside-label">Cost of a single<br>30-second TV spot<br>on Grey's Anatomy<br>(Minneapolis, 2006)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONCLUSION -->
+<div class="container">
+  <div class="conclusion">
+    <div class="conclusion-grid">
+      <div>
+        <h2>The Right Message.<br><em>Everywhere.</em></h2>
+        <p>Network television is no longer the only answer. The fragmentation of the audience, the rising cost of advertising, and the saturation of modern media can be seen as negatives — or as the impetus for a smarter, more targeted future of political communication.</p>
+        <p>Whatever new technologies emerge, the fundamental truth remains: beneath it all is still the message and the candidate. No amount of digital wizardry can save a bad campaign — but the right message can now travel farther, faster, and more precisely than ever imagined.</p>
+      </div>
+      <div class="final-quote">
+        <blockquote>"The right message — a compelling story that grabs the voters in just the right way — can now be sent to more people, more quickly and more effectively than ever before."</blockquote>
+        <cite>— Peter Fenn, Political Media Consultant &amp; Author</cite>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NEWSLETTER SECTION -->
+<section class="newsletter-section" id="newsletter">
+  <div class="container">
+    <div class="newsletter-inner">
+      <div class="newsletter-left">
+        <h2>The Campaign<br>Dispatch</h2>
+        <p>Join thousands of political professionals who receive our weekly digital newspaper — analysis, strategy breakdowns, and the latest in campaign media, delivered straight to your inbox.</p>
+        <span class="newsletter-preview-hint">Preview the latest issue below</span>
+      </div>
+      <div class="newsletter-form-wrap">
+        <div id="nf-form-fields">
+          <div class="nf-row">
+            <div class="nf-field">
+              <label for="nf-first">First Name</label>
+              <input type="text" id="nf-first" placeholder="James">
+            </div>
+            <div class="nf-field">
+              <label for="nf-last">Last Name</label>
+              <input type="text" id="nf-last" placeholder="Carville">
+            </div>
+          </div>
+          <div class="nf-row nf-full">
+            <div class="nf-field" style="grid-column:1/-1">
+              <label for="nf-email">Email Address</label>
+              <input type="email" id="nf-email" placeholder="you@campaign.com">
+            </div>
+          </div>
+          <div class="nf-row">
+            <div class="nf-field">
+              <label for="nf-role">Your Role</label>
+              <select id="nf-role">
+                <option value="">Select...</option>
+                <option>Campaign Manager</option>
+                <option>Media Consultant</option>
+                <option>Political Strategist</option>
+                <option>Researcher / Academic</option>
+                <option>Journalist</option>
+                <option>Student</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="nf-field">
+              <label for="nf-freq">Frequency</label>
+              <select id="nf-freq">
+                <option>Weekly Digest</option>
+                <option>Daily Briefing</option>
+                <option>Breaking News Only</option>
+              </select>
+            </div>
+          </div>
+          <div class="nf-interests">
+            <span class="nf-interests-label">Topics of Interest</span>
+            <div class="nf-checkboxes">
+              <label class="nf-check"><input type="checkbox" checked><span>Internet Strategy</span></label>
+              <label class="nf-check"><input type="checkbox" checked><span>E-mail Campaigns</span></label>
+              <label class="nf-check"><input type="checkbox"><span>Ad Spending</span></label>
+              <label class="nf-check"><input type="checkbox"><span>Voter Targeting</span></label>
+              <label class="nf-check"><input type="checkbox"><span>Media Buying</span></label>
+              <label class="nf-check"><input type="checkbox"><span>Fundraising</span></label>
+            </div>
+          </div>
+          <button class="nf-submit" id="nf-submit-btn">
+            <span class="btn-text">Subscribe &amp; Receive First Issue →</span>
+          </button>
+        </div>
+        <div class="nf-success" id="nf-success">
+          <div class="nf-success-icon">✓</div>
+          <h3>You're subscribed.</h3>
+          <p>Your first issue of <em>The Campaign Dispatch</em> has been sent. Click below to preview it now.</p>
+          <button class="nf-preview-btn" id="nf-open-newspaper">Read This Week's Issue →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEWSPAPER MODAL — PAGE-FLIP BOOK -->
+<div class="modal-overlay" id="newspaper-modal">
+
+  <!-- Chrome bar -->
+  <div class="book-chrome">
+    <span class="book-title-bar">The Campaign Dispatch · Digital Edition</span>
+    <div class="book-controls">
+      <span class="book-page-indicator" id="book-page-label">Page 1 of 3</span>
+      <button class="book-nav-btn" id="book-prev" aria-label="Previous page" disabled>&#8592;</button>
+      <button class="book-nav-btn" id="book-next" aria-label="Next page">&#8594;</button>
+      <button class="np-close" id="np-close-btn" aria-label="Close newspaper">&#10005;</button>
+    </div>
+  </div>
+
+  <!-- Book stage -->
+  <div class="book-stage">
+    <div class="book-flipper" id="book-flipper">
+
+      <!-- ═══ PAGE 1: FRONT PAGE ═══ -->
+      <div class="book-page active" id="book-page-1">
+        <div class="page-corner-hint"></div>
+
+        <div class="np-header">
+          <div class="np-flag">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:0.52rem;letter-spacing:0.1em;color:#888;">VOL. XII · NO. 47</span>
+            <span class="np-flag-center">ESTABLISHED 2000 · DIGITAL EDITION</span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:0.52rem;letter-spacing:0.1em;color:#888;">FREE TO SUBSCRIBERS</span>
+          </div>
+          <div class="np-nameplate">The Campaign Dispatch</div>
+          <div class="np-rule-row"><div class="np-rule-line"></div><div class="np-rule-dot"></div><div class="np-rule-line"></div></div>
+          <div class="np-tagline">Political Strategy · Digital Media · Campaign Intelligence</div>
+          <nav class="np-nav">
+            <span style="background:#0a0a0a;color:#faf6ec;">Front Page</span>
+            <span>Strategy</span>
+            <span>Digital</span>
+            <span>Money &amp; Media</span>
+            <span>Opinion</span>
+            <span>Data</span>
+          </nav>
+        </div>
+
+        <div class="np-body">
+          <div class="np-lead">
+            <div class="np-lead-left">
+              <span class="np-section-tag">Lead Story · Internet Strategy</span>
+              <h2 class="np-lead-headline">The Internet Is Now the Campaign's Most Powerful Weapon — And Most Campaigns Are Still Ignoring It</h2>
+              <p class="np-lead-deck">As broadband penetration surpasses 45% of American homes, a new frontier of hyper-targeted, near-costless political communication sits largely untapped by the very campaigns that need it most.</p>
+              <div class="np-body-text">
+                <p class="np-dropcap">A new study from the Pew Internet and American Life Project confirms what leading political strategists have argued for years: the Internet is no longer a supplementary channel. With 46% of online Americans seeking political news on the web — a figure that doubled since 2002 — campaigns failing to invest in digital infrastructure are, as one consultant puts it, "fighting a modern war with muskets."</p>
+                <p>From 2002 to 2006, the share of American adults with high-speed internet grew by an extraordinary 265% — from 17% to 45%. Primetime broadcast viewership meanwhile shed 30 points in a decade, dropping from 74.8% in 1990 to under 44%.</p>
+                <div class="np-inline-quote">"As a campaigning tool, e-mail is going to be what I would consider a tactical nuclear weapon in the future." — Larry Purpuro, RNC</div>
+                <p>The cost contrast is stark. A single 30-second prime drama spot in the 2006 cycle cost over $20,000 in mid-size markets. The same campaign can purchase 1,000 precisely targeted online impressions for $35. "The math," as Peter Fenn observes, "is not subtle."</p>
+              </div>
+            </div>
+            <div class="np-lead-right">
+              <div class="np-sidebar-item">
+                <span class="np-section-tag">Data</span>
+                <div class="np-stat-box"><div class="np-stat-box-num">265%</div><div class="np-stat-box-label">Broadband growth<br>2002–2006</div></div>
+                <div class="np-stat-box" style="margin-top:0.5rem"><div class="np-stat-box-num" style="color:#b8922a">$35</div><div class="np-stat-box-label">Per 1,000 targeted<br>online impressions</div></div>
+              </div>
+              <hr class="np-sidebar-divider">
+              <div class="np-sidebar-item">
+                <span class="np-section-tag">Also Inside</span>
+                <div class="np-sidebar-headline">Howard Dean's MeetUp Experiment Rewrites the Grassroots Playbook</div>
+                <p class="np-sidebar-text">How an online community strategy became the blueprint for every campaign that followed. <em style="color:#c8102e">→ Page 2</em></p>
+              </div>
+              <hr class="np-sidebar-divider">
+              <div class="np-sidebar-item">
+                <div class="np-sidebar-headline">Hillary Clinton Announces Candidacy via Website in Historic First</div>
+                <p class="np-sidebar-text">The web is now a primary venue for the most consequential political communications. <em style="color:#c8102e">→ Page 3</em></p>
+              </div>
+              <hr class="np-sidebar-divider">
+              <div class="np-ad">
+                <div class="np-ad-headline">Campaign Media Institute</div>
+                <div class="np-ad-text">DIGITAL TRAINING WORKSHOPS<br>SPRING SESSION ENROLLING<br>Washington, D.C. · Online</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="np-footer">
+          <p>© The Campaign Dispatch · Digital Edition</p>
+          <span class="np-footer-logo">Page 1</span>
+          <p>Flip → for more</p>
+        </div>
+      </div>
+
+      <!-- ═══ PAGE 2: STRATEGY & DIGITAL ═══ -->
+      <div class="book-page" id="book-page-2">
+        <div class="page-corner-hint"></div>
+
+        <div class="np-header" style="padding:0.8rem 2rem 0.6rem">
+          <div class="np-flag">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:0.52rem;letter-spacing:0.1em;color:#888;">VOL. XII · NO. 47</span>
+            <span class="np-flag-center" style="font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:#0a0a0a;letter-spacing:0">The Campaign Dispatch</span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:0.52rem;letter-spacing:0.1em;color:#888;">STRATEGY &amp; DIGITAL</span>
+          </div>
+          <div style="height:1px;background:#0a0a0a;margin:0.4rem 0 0"></div>
+        </div>
+
+        <div class="np-body">
+          <div class="np-three-col" style="margin-bottom:1.4rem">
+            <div class="np-col-article">
+              <span class="np-section-tag">E-mail</span>
+              <h3 class="np-col-headline">Building the List: Why E-mail Addresses Are the New Gold</h3>
+              <p class="np-col-text">Both parties collected hundreds of thousands of addresses in 2000. Strategists say those lists — grown over successive cycles — now represent a communication asset that will ultimately outpace broadcast television. "Only the absence of a phone book for the Internet is stopping it from happening already," writes Dick Morris.</p>
+            </div>
+            <div class="np-col-article">
+              <span class="np-section-tag">Targeting</span>
+              <h3 class="np-col-headline">Demotargeting: Precision Voter Ads at Fraction of TV Cost</h3>
+              <p class="np-col-text">New demographic targeting lets campaigns serve ads exclusively to defined voter segments — by party affiliation, income, gender, and ZIP code simultaneously. What previously required a massive multi-channel TV buy can now be executed through a single digital platform for pennies on the dollar.</p>
+            </div>
+            <div class="np-col-article">
+              <span class="np-section-tag">Websites</span>
+              <h3 class="np-col-headline">Candidate Portals: From Brochure to Living Command Center</h3>
+              <p class="np-col-text">Research confirms high interactivity on candidate websites directly increases perceived trustworthiness. Campaigns investing in polls, chat interfaces, live webcasts and constantly refreshed content turn websites into genuine voter-engagement engines — not digital billboards.</p>
+            </div>
+          </div>
+
+          <div style="border:2px solid #0a0a0a;padding:1.2rem;background:#0a0a0a;color:#faf6ec;margin-bottom:1.4rem">
+            <span class="np-section-tag" style="color:#b8922a;border-color:#b8922a;margin-bottom:0.6rem">Strategy Feature</span>
+            <h3 style="font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;line-height:1.2;margin-bottom:0.6rem">Howard Dean's MeetUp Strategy — How One Candidate Invented the Modern Digital Campaign</h3>
+            <p style="font-size:0.8rem;line-height:1.7;color:rgba(245,240,232,0.7)">In 2004, former Vermont governor Howard Dean used MeetUp.com to form an online community of supporters who gathered in person nationwide. The approach — creating a real-world community rooted in online organisation — had never been done before in presidential politics. It is now accepted strategy. The Internet's ability to bring supporters together, coordinate volunteer activities, spread messaging organically, and most importantly collect donations at scale via credit card from donors who might never have given otherwise — proved transformative. Dean's campaign raised millions online before the primaries, setting a template Barack Obama would perfect in 2008.</p>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem">
+            <div>
+              <span class="np-section-tag">Interactivity</span>
+              <h3 class="np-col-headline">Two-Way Communication Transforms Passive Viewers Into Invested Participants</h3>
+              <p class="np-col-text">Research by Lynda Lee Kaid (2002) found that candidates with high website interactivity were perceived as more sensitive and trustworthy — particularly by apathetic voters who are hardest to reach. Online polls, candidate Q&amp;A, chat rooms, and live webcasts create the sense that a voter has a genuine stake in the campaign's outcome.</p>
+              <ul style="list-style:none;margin-top:0.8rem;display:flex;flex-direction:column;gap:0.35rem">
+                <li style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:#555;padding-left:0.8rem;position:relative"><span style="position:absolute;left:0;color:#c8102e">→</span> Live polls and real-time surveys</li>
+                <li style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:#555;padding-left:0.8rem;position:relative"><span style="position:absolute;left:0;color:#c8102e">→</span> Webcasts and virtual town halls</li>
+                <li style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:#555;padding-left:0.8rem;position:relative"><span style="position:absolute;left:0;color:#c8102e">→</span> Volunteer coordination at scale</li>
+                <li style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:#555;padding-left:0.8rem;position:relative"><span style="position:absolute;left:0;color:#c8102e">→</span> Credit-card fundraising portals</li>
+              </ul>
+            </div>
+            <div>
+              <span class="np-section-tag">Customisation</span>
+              <h3 class="np-col-headline">No Other Medium Lets Each Voter Build Their Own Information Experience</h3>
+              <p class="np-col-text">A well-designed candidate website lets a voter worried about healthcare dive deep into policy papers, while one focused on foreign affairs explores those issues — both on their own terms, without friction. Technology enables "instant feedback" loops: tracking which ads drive click-throughs, which content fuels donations, and which pages hold attention — without expensive focus groups.</p>
+              <div class="np-stat-box" style="margin-top:0.8rem">
+                <div class="np-stat-box-num" style="font-size:1.8rem">5×</div>
+                <div class="np-stat-box-label">Growth in online political<br>news consumption, last decade</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="np-footer">
+          <p>© The Campaign Dispatch · Digital Edition</p>
+          <span class="np-footer-logo">Page 2</span>
+          <p>← Prev · Next →</p>
+        </div>
+      </div>
+
+      <!-- ═══ PAGE 3: MONEY, OPINION & DATA ═══ -->
+      <div class="book-page" id="book-page-3">
+        <div class="np-header" style="padding:0.8rem 2rem 0.6rem">
+          <div class="np-flag">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:0.52rem;letter-spacing:0.1em;color:#888;">VOL. XII · NO. 47</span>
+            <span class="np-flag-center" style="font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:#0a0a0a;letter-spacing:0">The Campaign Dispatch</span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:0.52rem;letter-spacing:0.1em;color:#888;">MONEY · OPINION · DATA</span>
+          </div>
+          <div style="height:1px;background:#0a0a0a;margin:0.4rem 0 0"></div>
+        </div>
+
+        <div class="np-body">
+
+          <div style="display:grid;grid-template-columns:3fr 2fr;gap:1.4rem;border-bottom:2px solid #0a0a0a;padding-bottom:1.4rem;margin-bottom:1.4rem">
+            <div>
+              <span class="np-section-tag">Opinion · Peter Fenn</span>
+              <h3 style="font-family:'Playfair Display',serif;font-size:1.35rem;font-weight:700;line-height:1.2;margin-bottom:0.5rem">The Right Message Can Now Travel Farther, Faster, and Cheaper Than at Any Point in History</h3>
+              <p class="np-col-text">The three forces reshaping modern campaigns — audience fragmentation, rising TV costs, and media saturation — are not a crisis. They are the greatest opportunity political media has ever offered.</p>
+              <p class="np-col-text" style="margin-top:0.5rem">Cable let us target. The Internet lets us converse. E-mail lets us reach individuals, not demographics. The campaigns that thrive will not be those with the biggest television budgets, but those with the most sophisticated digital infrastructure and the courage to use it. The tools are here. The audiences are online. The cost is negligible. What is missing is the will.</p>
+              <div class="np-inline-quote" style="margin-top:0.8rem">"Right now we consultants drop the piano on the mouse. The future holds more in store." — Republican strategist Mike Murphy</div>
+            </div>
+            <div style="border-left:1px solid #ccc;padding-left:1.4rem;display:flex;flex-direction:column;gap:1rem">
+              <div>
+                <span class="np-section-tag">Money &amp; Media</span>
+                <h3 class="np-col-headline">Why the Internet Will Not Replace TV — But Will Force It to Improve</h3>
+                <p class="np-col-text">Internet banner ads, targeted cable buys, and e-mail campaigns do not replace television. They force the medium to become sharper. Campaigns that combine disciplined digital targeting with refined TV storytelling will outperform those that rely on either alone.</p>
+              </div>
+              <div class="np-stat-box">
+                <div class="np-stat-box-num">$20K</div>
+                <div class="np-stat-box-label">Single TV spot,<br>prime time, 2006</div>
+              </div>
+              <div class="np-stat-box">
+                <div class="np-stat-box-num" style="color:#b8922a">65%</div>
+                <div class="np-stat-box-label">Above Lowest Unit Rate<br>candidates actually paid</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.2rem;margin-bottom:1.4rem">
+            <div style="background:#0a0a0a;color:#faf6ec;padding:1rem">
+              <span class="np-section-tag" style="color:#b8922a;border-color:#b8922a">Viral Video</span>
+              <h3 style="font-family:'Playfair Display',serif;font-size:0.95rem;font-weight:700;line-height:1.3;margin-bottom:0.5rem">Bandwidth Growth Makes Video E-mail a Mass Tool</h3>
+              <p style="font-size:0.72rem;line-height:1.65;color:rgba(245,240,232,0.65)">With connection speeds rising, campaigns can now distribute full-quality video directly to supporters' inboxes — seeding organic sharing and extending reach at zero cost.</p>
+            </div>
+            <div style="background:#0a0a0a;color:#faf6ec;padding:1rem">
+              <span class="np-section-tag" style="color:#b8922a;border-color:#b8922a">Historic Moment</span>
+              <h3 style="font-family:'Playfair Display',serif;font-size:0.95rem;font-weight:700;line-height:1.3;margin-bottom:0.5rem">Clinton's Website Announcement Changes the Playbook Forever</h3>
+              <p style="font-size:0.72rem;line-height:1.65;color:rgba(245,240,232,0.65)">By announcing her presidential candidacy on her own website, Senator Clinton signalled that the web is now a primary venue for the most consequential political communications — not a footnote.</p>
+            </div>
+            <div style="background:#0a0a0a;color:#faf6ec;padding:1rem">
+              <span class="np-section-tag" style="color:#b8922a;border-color:#b8922a">CNN / YouTube</span>
+              <h3 style="font-family:'Playfair Display',serif;font-size:0.95rem;font-weight:700;line-height:1.3;margin-bottom:0.5rem">Voter-Generated Debate Questions Redefine Political Media</h3>
+              <p style="font-size:0.72rem;line-height:1.65;color:rgba(245,240,232,0.65)">The CNN/YouTube primary debates marked the first time citizen video questions replaced journalist moderators — a glimpse of the fully interactive campaign future Fenn envisions.</p>
+            </div>
+          </div>
+
+          <div style="border-top:3px double #0a0a0a;padding-top:1rem;display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:center">
+            <div>
+              <span class="np-section-tag">Editor's Note</span>
+              <p class="np-col-text"><em style="font-family:'Playfair Display',serif">This issue is based on analysis of Chapter 10 of the Routledge Handbook of Political Management, authored by Peter Fenn. All statistics cited are drawn from sources referenced in the original chapter, including Pew Internet & American Life Project, the UCLA Internet report, and the Cabletelevision Advertising Bureau.</em></p>
+            </div>
+            <div style="text-align:center;border:2px solid #0a0a0a;padding:1.2rem">
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;color:#c8102e;line-height:1">The Campaign<br>Dispatch</div>
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:0.55rem;letter-spacing:0.15em;color:#888;margin-top:0.4rem;text-transform:uppercase">Digital Edition · Est. 2000<br>Subscribe · Share · Archive</div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="np-footer">
+          <p>© The Campaign Dispatch · Digital Edition · All Rights Reserved</p>
+          <span class="np-footer-logo">Page 3</span>
+          <p>← Flip back</p>
+        </div>
+      </div>
+
+    </div><!-- /book-flipper -->
+  </div><!-- /book-stage -->
+
+</div><!-- /modal-overlay -->
+
+<!-- QR CODE SECTION -->
+<section class="qr-section" id="qr-code">
+  <div class="container">
+    <div class="qr-inner">
+      <div class="qr-card">
+        <div class="qr-card-label">Scan to Open<br>The Newspaper</div>
+        <canvas id="qr-canvas"></canvas>
+        <div class="qr-scan-badge">Scan Me</div>
+        <button class="qr-dl-btn" id="qr-download-btn">↓ Download QR</button>
+      </div>
+      <div class="qr-right">
+        <h2>Share the<br><span>Dispatch</span></h2>
+        <p>Have your classmates scan this QR code to open <em>The Campaign Dispatch</em> newspaper directly — no typing, no searching, no friction.</p>
+        <ul class="qr-steps">
+          <li><span class="qr-step-num">1</span> Open the camera app on any smartphone</li>
+          <li><span class="qr-step-num">2</span> Point it at the QR code on screen or printed</li>
+          <li><span class="qr-step-num">3</span> Tap the link that appears — newspaper opens instantly</li>
+        </ul>
+        <div class="qr-url-box">
+          <span class="qr-url-text" id="qr-url-display">Loading page URL...</span>
+          <button class="qr-copy-btn" id="qr-copy-btn">Copy Link</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>Source: Routledge Handbook of Political Management — Ch. 10 by Peter Fenn</p>
+  <p>The New Media in Political Campaigns: What the Future Holds</p>
+</footer>
+
+<script>
+  // Intersection Observer for scroll animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+
+  document.querySelectorAll('.stat-cell, .pillar, .card, .dual-section').forEach(el => {
+    observer.observe(el);
+  });
+
+  // Stagger delays
+  document.querySelectorAll('.pillar').forEach((el, i) => { el.style.transitionDelay = `${i * 0.12}s`; });
+  document.querySelectorAll('.card').forEach((el, i) => { el.style.transitionDelay = `${i * 0.1}s`; });
+  document.querySelectorAll('.stat-cell').forEach((el, i) => { el.style.transitionDelay = `${i * 0.1}s`; });
+
+  // ── NEWSLETTER ──
+  const submitBtn = document.getElementById('nf-submit-btn');
+  const successDiv = document.getElementById('nf-success');
+  const formFields = document.getElementById('nf-form-fields');
+
+  submitBtn.addEventListener('click', () => {
+    const email = document.getElementById('nf-email').value.trim();
+    if (!email || !email.includes('@')) {
+      document.getElementById('nf-email').style.borderColor = '#c8102e';
+      document.getElementById('nf-email').focus();
+      return;
+    }
+    // Show success
+    formFields.style.display = 'none';
+    successDiv.classList.add('show');
+  });
+
+  // ── NEWSPAPER MODAL + PAGE FLIP ──
+  const modal      = document.getElementById('newspaper-modal');
+  const prevBtn    = document.getElementById('book-prev');
+  const nextBtn    = document.getElementById('book-next');
+  const pageLabel  = document.getElementById('book-page-label');
+  const TOTAL_PAGES = 3;
+  let currentPage  = 1;
+  let isFlipping   = false;
+
+  function getPageEl(n) { return document.getElementById('book-page-' + n); }
+
+  function updateChrome() {
+    pageLabel.textContent = 'Page ' + currentPage + ' of ' + TOTAL_PAGES;
+    prevBtn.disabled = currentPage === 1;
+    nextBtn.disabled = currentPage === TOTAL_PAGES;
+  }
+
+  function flipTo(targetPage) {
+    if (isFlipping || targetPage === currentPage) return;
+    if (targetPage < 1 || targetPage > TOTAL_PAGES) return;
+    isFlipping = true;
+
+    const outEl  = getPageEl(currentPage);
+    const inEl   = getPageEl(targetPage);
+    const goingForward = targetPage > currentPage;
+
+    // Apply animation classes
+    outEl.classList.add(goingForward ? 'flip-out' : 'flip-back-out');
+    inEl.classList.add(goingForward ? 'flip-in' : 'flip-back-in');
+    inEl.style.display = 'block';
+
+    // Scroll new page to top instantly
+    inEl.scrollTop = 0;
+
+    const DURATION = 420;
+
+    setTimeout(() => {
+      outEl.classList.remove('active', 'flip-out', 'flip-back-out');
+      outEl.style.display = 'none';
+      inEl.classList.remove('flip-in', 'flip-back-in');
+      inEl.classList.add('active');
+      currentPage = targetPage;
+      updateChrome();
+      isFlipping = false;
+    }, DURATION);
+  }
+
+  function openNewspaper() {
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    // Reset to page 1
+    if (currentPage !== 1) {
+      document.querySelectorAll('.book-page').forEach(p => { p.classList.remove('active'); p.style.display = 'none'; });
+      getPageEl(1).classList.add('active');
+      getPageEl(1).style.display = 'block';
+      currentPage = 1;
+      updateChrome();
+    }
+  }
+
+  function closeNewspaper() {
+    modal.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  prevBtn.addEventListener('click', () => flipTo(currentPage - 1));
+  nextBtn.addEventListener('click', () => flipTo(currentPage + 1));
+
+  // Keyboard arrow navigation
+  document.addEventListener('keydown', (e) => {
+    if (!modal.classList.contains('open')) return;
+    if (e.key === 'ArrowRight') flipTo(currentPage + 1);
+    if (e.key === 'ArrowLeft')  flipTo(currentPage - 1);
+    if (e.key === 'Escape') closeNewspaper();
+  });
+
+  document.getElementById('nf-open-newspaper').addEventListener('click', openNewspaper);
+  document.getElementById('np-close-btn').addEventListener('click', closeNewspaper);
+  modal.addEventListener('click', (e) => { if (e.target === modal) closeNewspaper(); });
+
+  updateChrome();
+
+  // ── QR CODE ──
+  // Load QRCode.js from CDN then generate
+  (function() {
+    const script = document.createElement('script');
+    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';
+    script.onload = function() {
+      const pageUrl = window.location.href.split('#')[0] + '#newsletter';
+      document.getElementById('qr-url-display').textContent = pageUrl;
+
+      // Use QRCode library on a temp div, then copy to canvas
+      const tempDiv = document.createElement('div');
+      tempDiv.style.display = 'none';
+      document.body.appendChild(tempDiv);
+
+      new QRCode(tempDiv, {
+        text: pageUrl,
+        width: 220,
+        height: 220,
+        colorDark: '#0a0a0a',
+        colorLight: '#ffffff',
+        correctLevel: QRCode.CorrectLevel.H
+      });
+
+      // QRCode lib creates a canvas or img inside tempDiv
+      setTimeout(() => {
+        const generated = tempDiv.querySelector('canvas') || tempDiv.querySelector('img');
+        const targetCanvas = document.getElementById('qr-canvas');
+
+        if (generated && generated.tagName === 'CANVAS') {
+          targetCanvas.width = 220;
+          targetCanvas.height = 220;
+          const ctx = targetCanvas.getContext('2d');
+          ctx.drawImage(generated, 0, 0);
+        } else if (generated && generated.tagName === 'IMG') {
+          targetCanvas.width = 220;
+          targetCanvas.height = 220;
+          const ctx = targetCanvas.getContext('2d');
+          generated.onload = () => ctx.drawImage(generated, 0, 0);
+          if (generated.complete) ctx.drawImage(generated, 0, 0);
+        }
+        document.body.removeChild(tempDiv);
+      }, 300);
+    };
+    document.head.appendChild(script);
+  })();
+
+  // Copy URL button
+  document.getElementById('qr-copy-btn').addEventListener('click', function() {
+    const url = document.getElementById('qr-url-display').textContent;
+    navigator.clipboard.writeText(url).then(() => {
+      this.textContent = 'Copied!';
+      setTimeout(() => { this.textContent = 'Copy Link'; }, 2000);
+    });
+  });
+
+  // Download QR
+  document.getElementById('qr-download-btn').addEventListener('click', function() {
+    const canvas = document.getElementById('qr-canvas');
+    const link = document.createElement('a');
+    link.download = 'campaign-dispatch-qr.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  });
+</script>
+</body>
+</html>
