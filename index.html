@@ -1043,34 +1043,85 @@
 
   .book-page.active { display: block; }
 
-  /* FLIP OUT: current page flips away to the left */
+  /* ── PHYSICS PAGE-FLIP ANIMATIONS ──
+     Three-phase spring: accelerate → overshoot → settle
+     Phase 1 (0-55%): rapid acceleration into the fold
+     Phase 2 (55-80%): swing past neutral with momentum overshoot
+     Phase 3 (80-100%): spring back and settle with damping
+  */
+
+  /* FORWARD: current page folds away left like a real page turn */
   @keyframes flipOut {
-    0%   { transform: rotateY(0deg); opacity: 1; transform-origin: left center; }
-    100% { transform: rotateY(-90deg); opacity: 0; transform-origin: left center; }
+    0%   { transform: perspective(1400px) rotateY(0deg)   scaleX(1);    opacity: 1; box-shadow: 0 20px 80px rgba(0,0,0,0.6), 4px 0 30px rgba(0,0,0,0.3); }
+    18%  { transform: perspective(1400px) rotateY(-22deg) scaleX(0.97); opacity: 1; box-shadow: 0 24px 90px rgba(0,0,0,0.65), 10px 0 40px rgba(0,0,0,0.35); }
+    50%  { transform: perspective(1400px) rotateY(-75deg) scaleX(0.88); opacity: 0.6; box-shadow: 0 12px 50px rgba(0,0,0,0.5); }
+    78%  { transform: perspective(1400px) rotateY(-95deg) scaleX(0.85); opacity: 0.1; }
+    100% { transform: perspective(1400px) rotateY(-90deg) scaleX(0.85); opacity: 0; box-shadow: none; }
   }
 
-  /* FLIP IN: new page arrives from the right */
+  /* FORWARD: new page unfolds in from right with spring overshoot */
   @keyframes flipIn {
-    0%   { transform: rotateY(90deg); opacity: 0; transform-origin: left center; }
-    100% { transform: rotateY(0deg);  opacity: 1; transform-origin: left center; }
+    0%   { transform: perspective(1400px) rotateY(90deg)  scaleX(0.85); opacity: 0;   box-shadow: none; }
+    20%  { transform: perspective(1400px) rotateY(68deg)  scaleX(0.87); opacity: 0.15; }
+    50%  { transform: perspective(1400px) rotateY(24deg)  scaleX(0.94); opacity: 0.7;  box-shadow: 0 16px 60px rgba(0,0,0,0.55), 6px 0 35px rgba(0,0,0,0.3); }
+    72%  { transform: perspective(1400px) rotateY(-6deg)  scaleX(1.01); opacity: 0.95; box-shadow: 0 22px 85px rgba(0,0,0,0.6), 4px 0 32px rgba(0,0,0,0.3); }
+    85%  { transform: perspective(1400px) rotateY(3deg)   scaleX(0.995); opacity: 1; }
+    93%  { transform: perspective(1400px) rotateY(-1.5deg) scaleX(1.002); opacity: 1; }
+    100% { transform: perspective(1400px) rotateY(0deg)   scaleX(1);    opacity: 1;   box-shadow: 0 20px 80px rgba(0,0,0,0.6), 4px 0 30px rgba(0,0,0,0.3); }
   }
 
-  /* FLIP BACK OUT: current page flips away to the right */
+  /* BACKWARD: current page folds away right */
   @keyframes flipBackOut {
-    0%   { transform: rotateY(0deg);   opacity: 1; transform-origin: right center; }
-    100% { transform: rotateY(90deg);  opacity: 0; transform-origin: right center; }
+    0%   { transform: perspective(1400px) rotateY(0deg)   scaleX(1);    opacity: 1; box-shadow: 0 20px 80px rgba(0,0,0,0.6), 4px 0 30px rgba(0,0,0,0.3); }
+    18%  { transform: perspective(1400px) rotateY(22deg)  scaleX(0.97); opacity: 1; box-shadow: 0 24px 90px rgba(0,0,0,0.65), -10px 0 40px rgba(0,0,0,0.35); }
+    50%  { transform: perspective(1400px) rotateY(75deg)  scaleX(0.88); opacity: 0.6; box-shadow: 0 12px 50px rgba(0,0,0,0.5); }
+    78%  { transform: perspective(1400px) rotateY(95deg)  scaleX(0.85); opacity: 0.1; }
+    100% { transform: perspective(1400px) rotateY(90deg)  scaleX(0.85); opacity: 0;   box-shadow: none; }
   }
 
-  /* FLIP BACK IN: prev page arrives from the left */
+  /* BACKWARD: prev page unfolds in from left with spring */
   @keyframes flipBackIn {
-    0%   { transform: rotateY(-90deg); opacity: 0; transform-origin: right center; }
-    100% { transform: rotateY(0deg);   opacity: 1; transform-origin: right center; }
+    0%   { transform: perspective(1400px) rotateY(-90deg) scaleX(0.85); opacity: 0;   box-shadow: none; }
+    20%  { transform: perspective(1400px) rotateY(-68deg) scaleX(0.87); opacity: 0.15; }
+    50%  { transform: perspective(1400px) rotateY(-24deg) scaleX(0.94); opacity: 0.7;  box-shadow: 0 16px 60px rgba(0,0,0,0.55); }
+    72%  { transform: perspective(1400px) rotateY(6deg)   scaleX(1.01); opacity: 0.95; box-shadow: 0 22px 85px rgba(0,0,0,0.6); }
+    85%  { transform: perspective(1400px) rotateY(-3deg)  scaleX(0.995); opacity: 1; }
+    93%  { transform: perspective(1400px) rotateY(1.5deg) scaleX(1.002); opacity: 1; }
+    100% { transform: perspective(1400px) rotateY(0deg)   scaleX(1);    opacity: 1;   box-shadow: 0 20px 80px rgba(0,0,0,0.6), 4px 0 30px rgba(0,0,0,0.3); }
   }
 
-  .book-page.flip-out      { display: block; animation: flipOut     0.42s cubic-bezier(0.4,0,0.2,1) forwards; }
-  .book-page.flip-in       { display: block; animation: flipIn      0.42s cubic-bezier(0.4,0,0.2,1) forwards; }
-  .book-page.flip-back-out { display: block; animation: flipBackOut 0.42s cubic-bezier(0.4,0,0.2,1) forwards; }
-  .book-page.flip-back-in  { display: block; animation: flipBackIn  0.42s cubic-bezier(0.4,0,0.2,1) forwards; }
+  /* Sliding page-shadow overlay that sweeps during flip */
+  @keyframes flipShadowSweep {
+    0%   { background: linear-gradient(to right, transparent 80%, rgba(0,0,0,0.0) 100%); }
+    35%  { background: linear-gradient(to right, transparent 0%,  rgba(0,0,0,0.35) 100%); }
+    65%  { background: linear-gradient(to left,  transparent 0%,  rgba(0,0,0,0.35) 100%); }
+    100% { background: linear-gradient(to left,  transparent 80%, rgba(0,0,0,0.0) 100%); }
+  }
+
+  .book-page.flip-out      { display: block; animation: flipOut     0.55s cubic-bezier(0.22,0.1,0.25,1.0) forwards; transform-origin: left center; }
+  .book-page.flip-in       { display: block; animation: flipIn      0.60s cubic-bezier(0.22,0.1,0.25,1.0) forwards; transform-origin: right center; }
+  .book-page.flip-back-out { display: block; animation: flipBackOut 0.55s cubic-bezier(0.22,0.1,0.25,1.0) forwards; transform-origin: right center; }
+  .book-page.flip-back-in  { display: block; animation: flipBackIn  0.60s cubic-bezier(0.22,0.1,0.25,1.0) forwards; transform-origin: left center; }
+
+  /* Sweep shadow overlay on the flipping pages */
+  .book-page.flip-out::after,
+  .book-page.flip-in::after,
+  .book-page.flip-back-out::after,
+  .book-page.flip-back-in::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 10;
+    animation: flipShadowSweep 0.55s ease forwards;
+  }
+
+  /* Live drag state — applied by JS during touch drag */
+  .book-page.dragging {
+    display: block;
+    transition: transform 0.05s linear;
+    will-change: transform;
+  }
 
   /* Spine shadow on left edge of each page */
   .book-page::before {
@@ -1603,22 +1654,166 @@
 
   .qr-dl-btn:hover { background: var(--paper); color: var(--ink); border-color: var(--paper); }
 
-  /* ── RESPONSIVE ── */
+  /* ── RESPONSIVE: TABLET (≤900px) ── */
   @media (max-width: 900px) {
+    .masthead { padding: 1rem 1.5rem; }
+    .masthead-date { display: none; }
     .masthead-nav { display: none; }
-    .hero { grid-template-columns: 1fr; }
+    .container { padding: 0 1.5rem; }
+
+    .hero { grid-template-columns: 1fr; min-height: auto; }
+    .hero-left { padding: 3rem 1.5rem; }
     .hero-right { display: none; }
+    .hero-headline { font-size: clamp(3.5rem, 11vw, 6rem); }
+
     .stats-band { grid-template-columns: 1fr 1fr; }
+    .stat-cell { padding: 1.8rem 1rem; }
+    .stat-num { font-size: 2.8rem; }
+
+    .section-header { padding: 2.5rem 0 1.5rem; }
+    .section-number { font-size: 3.5rem; }
+    .section-title { font-size: 2rem; }
+
     .pillars { grid-template-columns: 1fr; }
     .pillar { border-right: none; border-bottom: 1px solid var(--ink); }
-    .internet-grid { grid-template-columns: 1fr; }
+    .pillars .pillar:last-child { border-bottom: none; }
+
+    .internet-section { padding: 3rem 0; }
+    .internet-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .internet-left h2 { font-size: 3rem; }
     .cards-trio { grid-template-columns: 1fr; }
+
+    .pull-quote { grid-template-columns: auto 1fr; gap: 1rem; }
+    .pull-quote-mark { font-size: 5rem; }
+    .pull-quote blockquote { font-size: 1.15rem; }
+
     .dual-section { grid-template-columns: 1fr; }
     .dual-cell:first-child { border-right: none; border-bottom: 2px solid var(--ink); }
-    .cost-grid { grid-template-columns: 1fr; }
-    .conclusion-grid { grid-template-columns: 1fr; }
-    .container { padding: 0 1.5rem; }
-    .masthead { padding: 1rem 1.5rem; }
+
+    .cost-section { padding: 3rem 0; }
+    .cost-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .cost-heading { font-size: 2.5rem; }
+
+    .conclusion { padding: 3rem 0 2rem; }
+    .conclusion-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .conclusion h2 { font-size: 2.8rem; }
+
+    .newsletter-section { padding: 3rem 0; }
+    .newsletter-inner { grid-template-columns: 1fr; gap: 2rem; }
+    .newsletter-left h2 { font-size: 3rem; }
+
+    .qr-section { padding: 3rem 0; }
+    .qr-inner { grid-template-columns: 1fr; gap: 2rem; }
+    .qr-card { width: fit-content; margin: 0 auto; }
+
+    .modal-overlay { padding: 0.5rem; }
+    .book-chrome { padding: 0 0 0.5rem; }
+    .book-title-bar { font-size: 0.7rem; }
+    .book-stage { perspective: 1200px; }
+    .book-page { max-height: 80vh; }
+
+    .np-header { padding: 1rem 1.2rem 0.6rem; }
+    .np-nameplate { font-size: 2.2rem; }
+    .np-body { padding: 1rem 1.2rem; }
+    .np-lead { grid-template-columns: 1fr; }
+    .np-lead-right { border-left: none; padding-left: 0; border-top: 1px solid #ccc; padding-top: 1rem; }
+    .np-three-col { grid-template-columns: 1fr; }
+    .np-col-article + .np-col-article { border-left: none; padding-left: 0; border-top: 1px solid #ccc; padding-top: 0.8rem; }
+    .np-footer { padding: 0.6rem 1.2rem; flex-wrap: wrap; gap: 0.3rem; }
+    .np-footer p:first-child { display: none; }
+  }
+
+  /* ── RESPONSIVE: MOBILE (≤600px) ── */
+  @media (max-width: 600px) {
+    .masthead { padding: 0.8rem 1rem; }
+    .masthead-title { font-size: 1.1rem; }
+    .container { padding: 0 1rem; }
+
+    .hero-left { padding: 2.5rem 1rem; }
+    .hero-headline { font-size: clamp(3rem, 13vw, 4.5rem); }
+    .hero-subhead { font-size: 0.95rem; }
+
+    .stats-band { grid-template-columns: 1fr 1fr; }
+    .stat-cell { padding: 1.2rem 0.75rem; }
+    .stat-num { font-size: 2.2rem; }
+    .stat-label { font-size: 0.58rem; }
+
+    .section-number { font-size: 2.5rem; }
+    .section-title { font-size: 1.5rem; }
+    .section-header { gap: 0.75rem; }
+
+    .pillar { padding: 1.5rem 1rem; }
+    .pillar-icon { font-size: 2.5rem; }
+
+    .internet-left h2 { font-size: 2.5rem; }
+    .card { padding: 1.5rem 1rem; }
+
+    .pull-quote { padding: 2rem 0; }
+    .pull-quote-mark { font-size: 4rem; }
+    .pull-quote blockquote { font-size: 1rem; }
+
+    .dual-cell { padding: 1.5rem 1rem; }
+    .dual-number { font-size: 2rem; }
+    .dual-cell-header h3 { font-size: 1.5rem; }
+
+    .cost-section { padding: 2.5rem 0; }
+    .cost-heading { font-size: 2rem; }
+    .cost-aside { padding: 1.5rem 1rem; }
+    .cost-aside-num { font-size: 3.5rem; }
+
+    .conclusion h2 { font-size: 2.2rem; }
+    .final-quote { padding: 1.5rem; }
+    .final-quote blockquote { font-size: 0.95rem; }
+
+    .newsletter-section::before { display: none; }
+    .newsletter-left h2 { font-size: 2.2rem; }
+    .newsletter-form-wrap { padding: 1.5rem 1rem; }
+    .nf-row { grid-template-columns: 1fr; }
+    .nf-field input, .nf-field select { font-size: 1rem; }
+
+    .qr-right h2 { font-size: 2.2rem; }
+    .qr-url-box { flex-direction: column; }
+    .qr-url-text { white-space: normal; word-break: break-all; }
+    .qr-copy-btn { border-left: none; border-top: 1px solid rgba(255,255,255,0.15); width: 100%; text-align: center; }
+
+    .modal-overlay { padding: 0; justify-content: flex-end; align-items: stretch; flex-direction: column; }
+    .book-chrome { max-width: 100%; padding: 0.6rem 1rem 0.5rem; background: rgba(10,10,10,0.98); }
+    .book-title-bar { font-size: 0.6rem; letter-spacing: 0.08em; }
+    .book-stage { max-width: 100%; flex: 1; perspective: 800px; }
+    .book-flipper { height: 100%; }
+    .book-page { max-height: calc(100dvh - 52px); border-radius: 0; box-shadow: none; }
+
+    .np-header { padding: 0.8rem 1rem 0.5rem; }
+    .np-nameplate { font-size: 1.6rem; }
+    .np-tagline { display: none; }
+    .np-nav span { font-size: 0.45rem; letter-spacing: 0.06em; padding: 0.25rem 0; }
+    .np-nav { margin: 0 -1rem; }
+    .np-body { padding: 0.8rem 1rem; }
+    .np-lead-headline { font-size: 1.2rem; }
+    .np-lead-deck { font-size: 0.75rem; }
+    .np-body-text { font-size: 0.75rem; }
+    .np-stat-box-num { font-size: 1.8rem; }
+    .np-three-col { grid-template-columns: 1fr; }
+    .np-col-headline { font-size: 0.88rem; }
+    .np-col-text { font-size: 0.7rem; }
+    .np-inline-quote { font-size: 0.8rem; }
+    .np-sidebar-headline { font-size: 0.85rem; }
+    .np-footer { padding: 0.5rem 1rem; }
+    .np-footer-logo { font-size: 0.75rem; }
+    .swipe-hint { display: flex !important; }
+  }
+
+  .swipe-hint {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.3rem 0 0;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.52rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.28);
   }
 </style>
 </head>
@@ -2141,6 +2336,7 @@
 
     </div><!-- /book-flipper -->
   </div><!-- /book-stage -->
+  <div class="swipe-hint" id="swipe-hint">&#8592; swipe to flip pages &#8594;</div>
 
 </div><!-- /modal-overlay -->
 
@@ -2213,14 +2409,19 @@
     successDiv.classList.add('show');
   });
 
-  // ── NEWSPAPER MODAL + PAGE FLIP ──
-  const modal      = document.getElementById('newspaper-modal');
-  const prevBtn    = document.getElementById('book-prev');
-  const nextBtn    = document.getElementById('book-next');
-  const pageLabel  = document.getElementById('book-page-label');
+  // ── NEWSPAPER MODAL + PHYSICS PAGE FLIP + SWIPE ──
+  const modal       = document.getElementById('newspaper-modal');
+  const prevBtn     = document.getElementById('book-prev');
+  const nextBtn     = document.getElementById('book-next');
+  const pageLabel   = document.getElementById('book-page-label');
+  const bookStage   = document.querySelector('.book-stage');
   const TOTAL_PAGES = 3;
-  let currentPage  = 1;
-  let isFlipping   = false;
+  let currentPage   = 1;
+  let isFlipping    = false;
+
+  // Animation durations must match CSS keyframe durations
+  const FLIP_OUT_MS = 550;
+  const FLIP_IN_MS  = 600;
 
   function getPageEl(n) { return document.getElementById('book-page-' + n); }
 
@@ -2235,39 +2436,66 @@
     if (targetPage < 1 || targetPage > TOTAL_PAGES) return;
     isFlipping = true;
 
-    const outEl  = getPageEl(currentPage);
-    const inEl   = getPageEl(targetPage);
+    const outEl        = getPageEl(currentPage);
+    const inEl         = getPageEl(targetPage);
     const goingForward = targetPage > currentPage;
 
-    // Apply animation classes
+    // Hide swipe hint after first flip
+    const hint = document.getElementById('swipe-hint');
+    if (hint) hint.style.opacity = '0';
+
+    // Prepare incoming page (invisible, behind outgoing)
+    inEl.style.display   = 'block';
+    inEl.style.position  = 'absolute';
+    inEl.style.top       = '0';
+    inEl.style.left      = '0';
+    inEl.style.width     = '100%';
+    inEl.scrollTop       = 0;
+
+    // Stack outgoing above incoming during flip
+    outEl.style.zIndex = '2';
+    inEl.style.zIndex  = '1';
+
+    // Fire out animation (shorter — page leaves quickly)
     outEl.classList.add(goingForward ? 'flip-out' : 'flip-back-out');
-    inEl.classList.add(goingForward ? 'flip-in' : 'flip-back-in');
-    inEl.style.display = 'block';
 
-    // Scroll new page to top instantly
-    inEl.scrollTop = 0;
-
-    const DURATION = 420;
-
+    // Fire in animation slightly delayed so the flip feels staggered
+    const inDelay = FLIP_OUT_MS * 0.28;
     setTimeout(() => {
+      inEl.classList.add(goingForward ? 'flip-in' : 'flip-back-in');
+    }, inDelay);
+
+    // Clean up after in-animation completes
+    setTimeout(() => {
+      // Reset all
       outEl.classList.remove('active', 'flip-out', 'flip-back-out');
       outEl.style.display = 'none';
+      outEl.style.position = '';
+      outEl.style.zIndex   = '';
+
       inEl.classList.remove('flip-in', 'flip-back-in');
       inEl.classList.add('active');
+      inEl.style.position = '';
+      inEl.style.top      = '';
+      inEl.style.left     = '';
+      inEl.style.width    = '';
+      inEl.style.zIndex   = '';
+
       currentPage = targetPage;
       updateChrome();
-      isFlipping = false;
-    }, DURATION);
+      isFlipping  = false;
+    }, inDelay + FLIP_IN_MS + 20);
   }
 
   function openNewspaper() {
     modal.classList.add('open');
     document.body.style.overflow = 'hidden';
-    // Reset to page 1
     if (currentPage !== 1) {
-      document.querySelectorAll('.book-page').forEach(p => { p.classList.remove('active'); p.style.display = 'none'; });
+      document.querySelectorAll('.book-page').forEach(p => {
+        p.classList.remove('active');
+        p.style.cssText = '';
+      });
       getPageEl(1).classList.add('active');
-      getPageEl(1).style.display = 'block';
       currentPage = 1;
       updateChrome();
     }
@@ -2281,7 +2509,6 @@
   prevBtn.addEventListener('click', () => flipTo(currentPage - 1));
   nextBtn.addEventListener('click', () => flipTo(currentPage + 1));
 
-  // Keyboard arrow navigation
   document.addEventListener('keydown', (e) => {
     if (!modal.classList.contains('open')) return;
     if (e.key === 'ArrowRight') flipTo(currentPage + 1);
@@ -2292,6 +2519,88 @@
   document.getElementById('nf-open-newspaper').addEventListener('click', openNewspaper);
   document.getElementById('np-close-btn').addEventListener('click', closeNewspaper);
   modal.addEventListener('click', (e) => { if (e.target === modal) closeNewspaper(); });
+
+  // ── TOUCH / SWIPE ──
+  // Tracks finger velocity to give the flip a thrown-page feel
+  let touchStartX   = 0;
+  let touchStartY   = 0;
+  let touchLastX    = 0;
+  let touchLastT    = 0;
+  let touchVelocity = 0;  // px/ms
+  let isDragging    = false;
+  const SWIPE_THRESHOLD_PX  = 52;   // min distance to count as a swipe
+  const SWIPE_VELOCITY_FAST = 0.45; // px/ms — fast flick bypasses distance check
+  const LOCK_AXIS_THRESHOLD = 12;   // px vertical before we lock to scroll
+
+  // We only want to intercept horizontal swipes on the book page itself,
+  // not interfere with vertical scrolling inside the newspaper content.
+  let axisLocked = null; // 'h' | 'v' | null
+
+  function onTouchStart(e) {
+    if (!modal.classList.contains('open')) return;
+    const t = e.touches[0];
+    touchStartX   = t.clientX;
+    touchStartY   = t.clientY;
+    touchLastX    = t.clientX;
+    touchLastT    = Date.now();
+    touchVelocity = 0;
+    isDragging    = false;
+    axisLocked    = null;
+  }
+
+  function onTouchMove(e) {
+    if (!modal.classList.contains('open')) return;
+    const t  = e.touches[0];
+    const dx = t.clientX - touchStartX;
+    const dy = t.clientY - touchStartY;
+    const now = Date.now();
+    const dt  = now - touchLastT || 1;
+
+    // Determine axis lock on first significant movement
+    if (!axisLocked) {
+      if (Math.abs(dx) > LOCK_AXIS_THRESHOLD || Math.abs(dy) > LOCK_AXIS_THRESHOLD) {
+        axisLocked = Math.abs(dx) > Math.abs(dy) ? 'h' : 'v';
+      }
+    }
+
+    if (axisLocked === 'h') {
+      // Prevent page scroll when swiping horizontally
+      e.preventDefault();
+      isDragging = true;
+
+      // Compute instantaneous velocity (smoothed)
+      const instV = (t.clientX - touchLastX) / dt;
+      touchVelocity = touchVelocity * 0.6 + instV * 0.4;
+    }
+
+    touchLastX = t.clientX;
+    touchLastT = now;
+  }
+
+  function onTouchEnd(e) {
+    if (!modal.classList.contains('open') || !isDragging) return;
+    isDragging = false;
+
+    const dx         = e.changedTouches[0].clientX - touchStartX;
+    const absV       = Math.abs(touchVelocity);
+    const isFastFlit = absV > SWIPE_VELOCITY_FAST;
+    const isLongSwip = Math.abs(dx) > SWIPE_THRESHOLD_PX;
+
+    if ((isLongSwip || isFastFlit) && !isFlipping) {
+      if (dx < 0) {
+        // Swiped left → next page
+        flipTo(currentPage + 1);
+      } else {
+        // Swiped right → prev page
+        flipTo(currentPage - 1);
+      }
+    }
+  }
+
+  // Attach to the book stage so scrolling inside np-body still works vertically
+  bookStage.addEventListener('touchstart', onTouchStart, { passive: true });
+  bookStage.addEventListener('touchmove',  onTouchMove,  { passive: false });
+  bookStage.addEventListener('touchend',   onTouchEnd,   { passive: true });
 
   updateChrome();
 
