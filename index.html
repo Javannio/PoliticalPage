@@ -2296,21 +2296,21 @@
   updateChrome();
 
   // ── QR CODE ──
-  // Load QRCode.js from CDN then generate
   (function() {
     const script = document.createElement('script');
     script.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';
     script.onload = function() {
-      const pageUrl = window.location.href.split('#')[0] + '#newsletter';
-      document.getElementById('qr-url-display').textContent = pageUrl;
+      // QR points to the page with ?open=newspaper so scanning auto-opens the modal
+      const base = window.location.href.split('?')[0].split('#')[0];
+      const qrUrl = base + '?open=newspaper';
+      document.getElementById('qr-url-display').textContent = qrUrl;
 
-      // Use QRCode library on a temp div, then copy to canvas
       const tempDiv = document.createElement('div');
       tempDiv.style.display = 'none';
       document.body.appendChild(tempDiv);
 
       new QRCode(tempDiv, {
-        text: pageUrl,
+        text: qrUrl,
         width: 220,
         height: 220,
         colorDark: '#0a0a0a',
@@ -2318,16 +2318,13 @@
         correctLevel: QRCode.CorrectLevel.H
       });
 
-      // QRCode lib creates a canvas or img inside tempDiv
       setTimeout(() => {
         const generated = tempDiv.querySelector('canvas') || tempDiv.querySelector('img');
         const targetCanvas = document.getElementById('qr-canvas');
-
         if (generated && generated.tagName === 'CANVAS') {
           targetCanvas.width = 220;
           targetCanvas.height = 220;
-          const ctx = targetCanvas.getContext('2d');
-          ctx.drawImage(generated, 0, 0);
+          targetCanvas.getContext('2d').drawImage(generated, 0, 0);
         } else if (generated && generated.tagName === 'IMG') {
           targetCanvas.width = 220;
           targetCanvas.height = 220;
@@ -2340,6 +2337,12 @@
     };
     document.head.appendChild(script);
   })();
+
+  // Auto-open newspaper if URL contains ?open=newspaper (i.e. scanned from QR)
+  if (new URLSearchParams(window.location.search).get('open') === 'newspaper') {
+    // Small delay so page renders first
+    setTimeout(openNewspaper, 400);
+  }
 
   // Copy URL button
   document.getElementById('qr-copy-btn').addEventListener('click', function() {
