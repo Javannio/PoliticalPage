@@ -82,6 +82,39 @@
 
   .masthead-nav a:hover { border-color: var(--accent); color: var(--accent); }
 
+  .masthead-zorisord {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    text-decoration: none;
+    padding: 0.25rem 0.7rem;
+    border: 1px solid var(--rule);
+    background: transparent;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .masthead-zorisord:hover { background: var(--ink); border-color: var(--ink); }
+  .masthead-zorisord:hover .mz-label,
+  .masthead-zorisord:hover .mz-name { color: #fff; }
+
+  .mz-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.5rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    transition: color 0.2s;
+  }
+  .mz-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.15em;
+    color: var(--ink);
+    line-height: 1;
+    transition: color 0.2s;
+  }
+
+  @media (max-width: 900px) { .masthead-zorisord { display: none; } }
+
   /* ── HERO ── */
   .hero {
     position: relative;
@@ -672,22 +705,146 @@
     font-style: normal;
   }
 
+  /* ── ZORISORD BRAND STRIP ── */
+  .zorisord-strip {
+    background: #0a0a0a;
+    border-top: 1px solid #1e1e1e;
+    padding: 2.5rem 3rem;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 2.5rem;
+  }
+
+  .zs-logo-block {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .zs-wordmark {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: 0.22em;
+    color: #fff;
+    line-height: 1;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .zs-wordmark:hover { color: var(--gold); }
+
+  .zs-tagline {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.52rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+    line-height: 1;
+  }
+
+  .zs-divider {
+    width: 1px;
+    height: 2.5rem;
+    background: rgba(255,255,255,0.1);
+    justify-self: center;
+  }
+
+  .zs-production-block {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .zs-production-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.52rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.28);
+  }
+
+  .zs-production-text {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 0.88rem;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.4;
+  }
+
+  .zs-production-text strong {
+    font-style: normal;
+    font-weight: 700;
+    color: rgba(255,255,255,0.85);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.82rem;
+    letter-spacing: 0.04em;
+  }
+
+  .zs-operated-by {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.5rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.28);
+  }
+
+  .zs-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.4rem;
+  }
+
+  .zs-reg {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.5rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.2);
+    text-align: right;
+    line-height: 1.6;
+  }
+
+  .zs-link {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.52rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s;
+  }
+  .zs-link:hover { border-color: var(--gold); }
+
   /* ── FOOTER ── */
   footer {
-    border-top: 2px solid var(--ink);
-    padding: 1.5rem 3rem;
+    border-top: 1px solid rgba(10,10,10,0.15);
+    padding: 1rem 3rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 3rem;
+    background: #0a0a0a;
   }
 
   footer p {
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.6rem;
+    font-size: 0.55rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--muted);
+    color: rgba(255,255,255,0.2);
+  }
+
+  @media (max-width: 900px) {
+    .zorisord-strip { grid-template-columns: 1fr 1fr; gap: 1.5rem; padding: 2rem 1.5rem; }
+    .zs-divider { display: none; }
+    .zs-right { align-items: flex-start; }
+  }
+
+  @media (max-width: 600px) {
+    .zorisord-strip { grid-template-columns: 1fr; gap: 1.2rem; padding: 1.8rem 1rem; }
+    .zs-right { align-items: flex-start; }
+    footer { padding: 0.8rem 1rem; flex-direction: column; gap: 0.3rem; text-align: center; }
   }
 
   /* ── ANIMATION HELPERS ── */
@@ -778,155 +935,8 @@
     background: rgba(255,255,255,0.4);
   }
 
-  .newsletter-form-wrap {
-    background: #fff;
-    padding: 2.5rem;
-    position: relative;
-  }
 
-  .newsletter-form-wrap::before {
-    content: '';
-    position: absolute;
-    top: 6px; left: 6px;
-    right: -6px; bottom: -6px;
-    border: 2px solid rgba(0,0,0,0.15);
-    pointer-events: none;
-  }
 
-  .newsletter-form-label {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.6rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--muted);
-    display: block;
-    margin-bottom: 0.4rem;
-  }
-
-  .newsletter-form-label + label {
-    display: block;
-    margin-top: 1rem;
-  }
-
-  .nf-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-    margin-bottom: 1rem;
-  }
-
-  .nf-field {
-    display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
-  }
-
-  .nf-field label {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.6rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-
-  .nf-field input, .nf-field select {
-    border: 1.5px solid var(--rule);
-    background: var(--paper);
-    padding: 0.65rem 0.75rem;
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 0.85rem;
-    color: var(--ink);
-    outline: none;
-    transition: border-color 0.2s;
-    -webkit-appearance: none;
-    appearance: none;
-  }
-
-  .nf-field input:focus, .nf-field select:focus {
-    border-color: var(--accent);
-  }
-
-  .nf-full { margin-bottom: 1rem; }
-
-  .nf-interests {
-    margin-bottom: 1.25rem;
-  }
-
-  .nf-interests-label {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.6rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--muted);
-    display: block;
-    margin-bottom: 0.5rem;
-  }
-
-  .nf-checkboxes {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
-
-  .nf-check {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    cursor: pointer;
-  }
-
-  .nf-check input[type="checkbox"] {
-    width: 14px; height: 14px;
-    border: 1.5px solid var(--rule);
-    background: var(--paper);
-    appearance: none; -webkit-appearance: none;
-    cursor: pointer;
-    position: relative;
-    flex-shrink: 0;
-    transition: background 0.15s, border-color 0.15s;
-  }
-
-  .nf-check input[type="checkbox"]:checked {
-    background: var(--accent);
-    border-color: var(--accent);
-  }
-
-  .nf-check input[type="checkbox"]:checked::after {
-    content: '✓';
-    position: absolute;
-    color: #fff;
-    font-size: 9px;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -52%);
-    font-weight: 700;
-  }
-
-  .nf-check span {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.62rem;
-    letter-spacing: 0.06em;
-    color: var(--ink);
-  }
-
-  .nf-submit {
-    width: 100%;
-    background: var(--ink);
-    color: var(--paper);
-    border: none;
-    padding: 0.9rem 2rem;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.2rem;
-    letter-spacing: 0.12em;
-    cursor: pointer;
-    transition: background 0.2s, transform 0.1s;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .nf-submit:hover { background: var(--accent); }
-  .nf-submit:active { transform: scale(0.99); }
-
-  .nf-submit .btn-text { position: relative; z-index: 1; }
 
   /* ── NEWSPAPER MODAL + PAGE FLIP ── */
   .modal-overlay {
@@ -1447,212 +1457,7 @@
     color: #faf6ec;
   }
 
-  /* Success state */
-  .nf-success {
-    display: none;
-    text-align: center;
-    padding: 2rem;
-  }
 
-  .nf-success.show { display: block; }
-  .nf-success-icon {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 3rem;
-    color: var(--accent);
-    margin-bottom: 0.5rem;
-  }
-
-  .nf-success h3 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.6rem;
-    margin-bottom: 0.5rem;
-    letter-spacing: 0.05em;
-  }
-
-  .nf-success p {
-    font-size: 0.85rem;
-    color: var(--muted);
-    line-height: 1.6;
-    margin-bottom: 1rem;
-  }
-
-  .nf-preview-btn {
-    background: var(--accent);
-    color: #fff;
-    border: none;
-    padding: 0.75rem 2rem;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.1rem;
-    letter-spacing: 0.1em;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-
-  .nf-preview-btn:hover { background: var(--ink); }
-
-  /* ── QR CODE SECTION ── */
-  .qr-section {
-    background: var(--ink);
-    color: var(--paper);
-    padding: 4rem 0;
-    border-top: 3px double var(--paper);
-  }
-
-  .qr-inner {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 4rem;
-    align-items: center;
-  }
-
-  .qr-card {
-    background: #fff;
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-    position: relative;
-    flex-shrink: 0;
-  }
-
-  .qr-card::before {
-    content: '';
-    position: absolute;
-    top: 8px; left: 8px; right: -8px; bottom: -8px;
-    border: 2px solid rgba(255,255,255,0.12);
-    pointer-events: none;
-  }
-
-  .qr-card-label {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.58rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--muted);
-    text-align: center;
-    line-height: 1.5;
-  }
-
-  #qr-canvas {
-    display: block;
-  }
-
-  .qr-scan-badge {
-    background: var(--accent);
-    color: #fff;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 0.85rem;
-    letter-spacing: 0.15em;
-    padding: 0.3rem 0.8rem;
-    text-align: center;
-  }
-
-  .qr-right h2 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 3.5rem;
-    line-height: 0.95;
-    letter-spacing: 0.03em;
-    margin-bottom: 1rem;
-    color: #fff;
-  }
-
-  .qr-right h2 span {
-    color: var(--accent);
-    display: block;
-  }
-
-  .qr-right p {
-    font-family: 'Playfair Display', serif;
-    font-style: italic;
-    font-size: 0.95rem;
-    line-height: 1.7;
-    color: rgba(245,240,232,0.7);
-    margin-bottom: 2rem;
-    max-width: 44ch;
-  }
-
-  .qr-steps {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    margin-bottom: 2rem;
-  }
-
-  .qr-steps li {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.8rem;
-    font-size: 0.85rem;
-    color: rgba(245,240,232,0.65);
-    line-height: 1.5;
-  }
-
-  .qr-step-num {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1rem;
-    color: var(--accent);
-    flex-shrink: 0;
-    width: 1.2rem;
-    line-height: 1.3;
-  }
-
-  .qr-url-box {
-    display: flex;
-    align-items: center;
-    gap: 0;
-    border: 1px solid rgba(255,255,255,0.15);
-    overflow: hidden;
-    max-width: 420px;
-  }
-
-  .qr-url-text {
-    flex: 1;
-    padding: 0.6rem 0.8rem;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.68rem;
-    letter-spacing: 0.05em;
-    color: rgba(245,240,232,0.55);
-    background: rgba(255,255,255,0.04);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .qr-copy-btn {
-    background: rgba(255,255,255,0.08);
-    border: none;
-    border-left: 1px solid rgba(255,255,255,0.15);
-    color: rgba(245,240,232,0.7);
-    padding: 0.6rem 1rem;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.62rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: background 0.2s, color 0.2s;
-    white-space: nowrap;
-  }
-
-  .qr-copy-btn:hover { background: var(--accent); color: #fff; }
-
-  .qr-dl-btn {
-    display: inline-block;
-    margin-top: 1rem;
-    background: transparent;
-    border: 1px solid rgba(255,255,255,0.25);
-    color: rgba(245,240,232,0.6);
-    padding: 0.5rem 1.2rem;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.6rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: background 0.2s, color 0.2s, border-color 0.2s;
-  }
-
-  .qr-dl-btn:hover { background: var(--paper); color: var(--ink); border-color: var(--paper); }
 
   /* ── RESPONSIVE: TABLET (≤900px) ── */
   @media (max-width: 900px) {
@@ -1702,9 +1507,6 @@
     .newsletter-inner { grid-template-columns: 1fr; gap: 2rem; }
     .newsletter-left h2 { font-size: 3rem; }
 
-    .qr-section { padding: 3rem 0; }
-    .qr-inner { grid-template-columns: 1fr; gap: 2rem; }
-    .qr-card { width: fit-content; margin: 0 auto; }
 
     .modal-overlay { padding: 0.5rem; }
     .book-chrome { padding: 0 0 0.5rem; }
@@ -1768,13 +1570,7 @@
     .newsletter-section::before { display: none; }
     .newsletter-left h2 { font-size: 2.2rem; }
     .newsletter-form-wrap { padding: 1.5rem 1rem; }
-    .nf-row { grid-template-columns: 1fr; }
-    .nf-field input, .nf-field select { font-size: 1rem; }
 
-    .qr-right h2 { font-size: 2.2rem; }
-    .qr-url-box { flex-direction: column; }
-    .qr-url-text { white-space: normal; word-break: break-all; }
-    .qr-copy-btn { border-left: none; border-top: 1px solid rgba(255,255,255,0.15); width: 100%; text-align: center; }
 
     .modal-overlay { padding: 0; justify-content: flex-end; align-items: stretch; flex-direction: column; }
     .book-chrome { max-width: 100%; padding: 0.6rem 1rem 0.5rem; background: rgba(10,10,10,0.98); }
@@ -1803,6 +1599,126 @@
     .swipe-hint { display: flex !important; }
   }
 
+  /* ── NEWSLETTER CTA (replaces form) ── */
+  .newsletter-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+
+  .newsletter-cta-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .newsletter-issue-card {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.14);
+    padding: 1.5rem 1.5rem 1.2rem;
+    position: relative;
+  }
+
+  .newsletter-issue-card::before {
+    content: '';
+    position: absolute;
+    top: 6px; left: 6px; right: -6px; bottom: -6px;
+    border: 1px solid rgba(255,255,255,0.07);
+    pointer-events: none;
+  }
+
+  .nic-vol {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.4);
+    margin-bottom: 0.6rem;
+  }
+
+  .nic-headline {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    line-height: 1.3;
+    color: #fff;
+    margin-bottom: 0.4rem;
+  }
+
+  .nic-deck {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    color: rgba(245,240,232,0.45);
+    margin-bottom: 1rem;
+  }
+
+  .nic-stories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .nic-stories span {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: rgba(245,240,232,0.6);
+    padding: 0.2rem 0.5rem;
+  }
+
+  .view-newsletter-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #fff;
+    color: var(--ink);
+    border: none;
+    padding: 1rem 1.4rem;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    gap: 1rem;
+  }
+
+  .view-newsletter-btn:hover {
+    background: var(--paper);
+    transform: translateX(4px);
+  }
+
+  .view-newsletter-btn:active { transform: translateX(2px) scale(0.99); }
+
+  .vnb-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.1em;
+    line-height: 1;
+  }
+
+  .vnb-arrow {
+    font-size: 1.4rem;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    transition: transform 0.2s;
+  }
+
+  .view-newsletter-btn:hover .vnb-arrow { transform: translateX(4px); }
+
+  .newsletter-note {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.3) !important;
+    margin: 0 !important;
+  }
+
+
   .swipe-hint {
     display: none;
     align-items: center;
@@ -1829,8 +1745,12 @@
     <li><a href="#customization">Customization</a></li>
     <li><a href="#cost">Cost</a></li>
     <li><a href="#newsletter">Newsletter</a></li>
-    <li><a href="#qr-code">QR Code</a></li>
   </ul></nav>
+  <a class="masthead-zorisord" href="https://www.zorisord.com" target="_blank" rel="noopener">
+    <span class="mz-label">A</span>
+    <span class="mz-name">Zorisord</span>
+    <span class="mz-label">Production</span>
+  </a>
 </header>
 
 <!-- HERO -->
@@ -2032,71 +1952,26 @@
     <div class="newsletter-inner">
       <div class="newsletter-left">
         <h2>The Campaign<br>Dispatch</h2>
-        <p>Join thousands of political professionals who receive our weekly digital newspaper — analysis, strategy breakdowns, and the latest in campaign media, delivered straight to your inbox.</p>
-        <span class="newsletter-preview-hint">Preview the latest issue below</span>
+        <p>The weekly digital newspaper for political professionals — strategy breakdowns, media analysis, and campaign intelligence, direct to your screen.</p>
+        <span class="newsletter-preview-hint">Three pages · Page-flip navigation</span>
       </div>
-      <div class="newsletter-form-wrap">
-        <div id="nf-form-fields">
-          <div class="nf-row">
-            <div class="nf-field">
-              <label for="nf-first">First Name</label>
-              <input type="text" id="nf-first" placeholder="James">
-            </div>
-            <div class="nf-field">
-              <label for="nf-last">Last Name</label>
-              <input type="text" id="nf-last" placeholder="Carville">
-            </div>
+      <div class="newsletter-cta-wrap">
+        <div class="newsletter-issue-card">
+          <div class="nic-vol">Vol. XII · No. 47 · Digital Edition</div>
+          <div class="nic-headline">The Internet Is Now the Campaign's Most Powerful Weapon</div>
+          <div class="nic-deck">Lead story · Internet Strategy · Peter Fenn analysis</div>
+          <div class="nic-stories">
+            <span>E-mail Targeting</span>
+            <span>Howard Dean Strategy</span>
+            <span>Cost vs. TV</span>
+            <span>Opinion</span>
           </div>
-          <div class="nf-row nf-full">
-            <div class="nf-field" style="grid-column:1/-1">
-              <label for="nf-email">Email Address</label>
-              <input type="email" id="nf-email" placeholder="you@campaign.com">
-            </div>
-          </div>
-          <div class="nf-row">
-            <div class="nf-field">
-              <label for="nf-role">Your Role</label>
-              <select id="nf-role">
-                <option value="">Select...</option>
-                <option>Campaign Manager</option>
-                <option>Media Consultant</option>
-                <option>Political Strategist</option>
-                <option>Researcher / Academic</option>
-                <option>Journalist</option>
-                <option>Student</option>
-                <option>Other</option>
-              </select>
-            </div>
-            <div class="nf-field">
-              <label for="nf-freq">Frequency</label>
-              <select id="nf-freq">
-                <option>Weekly Digest</option>
-                <option>Daily Briefing</option>
-                <option>Breaking News Only</option>
-              </select>
-            </div>
-          </div>
-          <div class="nf-interests">
-            <span class="nf-interests-label">Topics of Interest</span>
-            <div class="nf-checkboxes">
-              <label class="nf-check"><input type="checkbox" checked><span>Internet Strategy</span></label>
-              <label class="nf-check"><input type="checkbox" checked><span>E-mail Campaigns</span></label>
-              <label class="nf-check"><input type="checkbox"><span>Ad Spending</span></label>
-              <label class="nf-check"><input type="checkbox"><span>Voter Targeting</span></label>
-              <label class="nf-check"><input type="checkbox"><span>Media Buying</span></label>
-              <label class="nf-check"><input type="checkbox"><span>Fundraising</span></label>
-            </div>
-          </div>
-          <button class="nf-submit" id="nf-submit-btn">
-            <span class="btn-text">Subscribe &amp; Receive First Issue →</span>
-          </button>
         </div>
-        <div class="nf-success" id="nf-success">
-          <div class="nf-success-icon">✓</div>
-          <h3>You're subscribed.</h3>
-          <p>Your first issue of <em>The Campaign Dispatch</em> has been sent. Click below to preview it now.</p>
-          <button class="nf-preview-btn" id="nf-open-newspaper">Read This Week's Issue →</button>
-        </div>
+        <button class="view-newsletter-btn" id="nf-open-newspaper">
+          <span class="vnb-label">View Newsletter</span>
+          <span class="vnb-arrow">→</span>
+        </button>
+        <p class="newsletter-note">Opens the interactive page-flip edition</p>
       </div>
     </div>
   </div>
@@ -2340,37 +2215,32 @@
 
 </div><!-- /modal-overlay -->
 
-<!-- QR CODE SECTION -->
-<section class="qr-section" id="qr-code">
-  <div class="container">
-    <div class="qr-inner">
-      <div class="qr-card">
-        <div class="qr-card-label">Scan to Open<br>The Newspaper</div>
-        <canvas id="qr-canvas"></canvas>
-        <div class="qr-scan-badge">Scan Me</div>
-        <button class="qr-dl-btn" id="qr-download-btn">↓ Download QR</button>
-      </div>
-      <div class="qr-right">
-        <h2>Share the<br><span>Dispatch</span></h2>
-        <p>Have your classmates scan this QR code to open <em>The Campaign Dispatch</em> newspaper directly — no typing, no searching, no friction.</p>
-        <ul class="qr-steps">
-          <li><span class="qr-step-num">1</span> Open the camera app on any smartphone</li>
-          <li><span class="qr-step-num">2</span> Point it at the QR code on screen or printed</li>
-          <li><span class="qr-step-num">3</span> Tap the link that appears — newspaper opens instantly</li>
-        </ul>
-        <div class="qr-url-box">
-          <span class="qr-url-text" id="qr-url-display">Loading page URL...</span>
-          <button class="qr-copy-btn" id="qr-copy-btn">Copy Link</button>
-        </div>
-      </div>
-    </div>
+
+<!-- ZORISORD BRAND STRIP -->
+<div class="zorisord-strip">
+  <div class="zs-logo-block">
+    <a class="zs-wordmark" href="https://www.zorisord.com" target="_blank" rel="noopener">ZORISORD</a>
+    <span class="zs-tagline">Universal &amp; Industrial Innovation</span>
   </div>
-</section>
+  <div class="zs-divider"></div>
+  <div class="zs-production-block">
+    <span class="zs-production-label">A production of</span>
+    <p class="zs-production-text">
+      <strong>Zoris Studios</strong><br>
+      <span class="zs-operated-by">Operated By</span><br>
+      Zorisord Group Limited A Private Holding Company · Registered in Jamaica
+    </p>
+  </div>
+  <div class="zs-right">
+    <span class="zs-reg">Company No. 133076<br>Haughton Hall Estate, Green Island, Hanover</span>
+    <a class="zs-link" href="https://www.zorisord.com" target="_blank" rel="noopener">zorisord.com ↗</a>
+  </div>
+</div>
 
 <!-- FOOTER -->
 <footer>
-  <p>Source: Routledge Handbook of Political Management — Ch. 10 by Peter Fenn</p>
-  <p>The New Media in Political Campaigns: What the Future Holds</p>
+  <p>Source: Routledge Handbook of Political Management — Ch. 10 · Peter Fenn</p>
+  <p>&copy; Zorisord Group Limited · All rights reserved</p>
 </footer>
 
 <script>
@@ -2392,22 +2262,7 @@
   document.querySelectorAll('.card').forEach((el, i) => { el.style.transitionDelay = `${i * 0.1}s`; });
   document.querySelectorAll('.stat-cell').forEach((el, i) => { el.style.transitionDelay = `${i * 0.1}s`; });
 
-  // ── NEWSLETTER ──
-  const submitBtn = document.getElementById('nf-submit-btn');
-  const successDiv = document.getElementById('nf-success');
-  const formFields = document.getElementById('nf-form-fields');
-
-  submitBtn.addEventListener('click', () => {
-    const email = document.getElementById('nf-email').value.trim();
-    if (!email || !email.includes('@')) {
-      document.getElementById('nf-email').style.borderColor = '#c8102e';
-      document.getElementById('nf-email').focus();
-      return;
-    }
-    // Show success
-    formFields.style.display = 'none';
-    successDiv.classList.add('show');
-  });
+  // ── NEWSLETTER ── (button wired below with modal open)
 
   // ── NEWSPAPER MODAL + PHYSICS PAGE FLIP + SWIPE ──
   const modal       = document.getElementById('newspaper-modal');
@@ -2604,72 +2459,6 @@
 
   updateChrome();
 
-  // ── QR CODE ──
-  (function() {
-    const script = document.createElement('script');
-    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';
-    script.onload = function() {
-      // QR points to the page with ?open=newspaper so scanning auto-opens the modal
-      const base = window.location.href.split('?')[0].split('#')[0];
-      const qrUrl = base + '?open=newspaper';
-      document.getElementById('qr-url-display').textContent = qrUrl;
-
-      const tempDiv = document.createElement('div');
-      tempDiv.style.display = 'none';
-      document.body.appendChild(tempDiv);
-
-      new QRCode(tempDiv, {
-        text: qrUrl,
-        width: 220,
-        height: 220,
-        colorDark: '#0a0a0a',
-        colorLight: '#ffffff',
-        correctLevel: QRCode.CorrectLevel.H
-      });
-
-      setTimeout(() => {
-        const generated = tempDiv.querySelector('canvas') || tempDiv.querySelector('img');
-        const targetCanvas = document.getElementById('qr-canvas');
-        if (generated && generated.tagName === 'CANVAS') {
-          targetCanvas.width = 220;
-          targetCanvas.height = 220;
-          targetCanvas.getContext('2d').drawImage(generated, 0, 0);
-        } else if (generated && generated.tagName === 'IMG') {
-          targetCanvas.width = 220;
-          targetCanvas.height = 220;
-          const ctx = targetCanvas.getContext('2d');
-          generated.onload = () => ctx.drawImage(generated, 0, 0);
-          if (generated.complete) ctx.drawImage(generated, 0, 0);
-        }
-        document.body.removeChild(tempDiv);
-      }, 300);
-    };
-    document.head.appendChild(script);
-  })();
-
-  // Auto-open newspaper if URL contains ?open=newspaper (i.e. scanned from QR)
-  if (new URLSearchParams(window.location.search).get('open') === 'newspaper') {
-    // Small delay so page renders first
-    setTimeout(openNewspaper, 400);
-  }
-
-  // Copy URL button
-  document.getElementById('qr-copy-btn').addEventListener('click', function() {
-    const url = document.getElementById('qr-url-display').textContent;
-    navigator.clipboard.writeText(url).then(() => {
-      this.textContent = 'Copied!';
-      setTimeout(() => { this.textContent = 'Copy Link'; }, 2000);
-    });
-  });
-
-  // Download QR
-  document.getElementById('qr-download-btn').addEventListener('click', function() {
-    const canvas = document.getElementById('qr-canvas');
-    const link = document.createElement('a');
-    link.download = 'campaign-dispatch-qr.png';
-    link.href = canvas.toDataURL('image/png');
-    link.click();
-  });
 </script>
 </body>
 </html>
